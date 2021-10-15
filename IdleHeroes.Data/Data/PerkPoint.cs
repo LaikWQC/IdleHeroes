@@ -9,8 +9,9 @@ namespace IdleHeroes.Data
         private readonly PerksCollector _collector;
         private List<PerkValue> _values;
 
-        public PerkPoint(JobData owner, PerksCollector collector, int price, IEnumerable<PerkValue> values)
+        public PerkPoint(string id, JobData owner, PerksCollector collector, int price, IEnumerable<PerkValue> values)
         {
+            Id = id;
             _owner = owner;
             _collector = collector;
 
@@ -21,6 +22,7 @@ namespace IdleHeroes.Data
                 Buy();
         }
 
+        public string Id { get; }
         public int Price { get; }
         public bool IsBought { get; private set; } = false;
 
