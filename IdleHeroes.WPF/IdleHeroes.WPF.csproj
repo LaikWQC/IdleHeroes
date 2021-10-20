@@ -6,4 +6,9 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\IdleHeroes.Data\IdleHeroes.Data.csproj" />
+    <ProjectReference Include="..\IdleHeroes.Model\IdleHeroes.Model.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,0 +1,34 @@
+<Data>
+  <Jobs>
+    <Job Name="Archer" Tags="ARC,RNG,ALL">
+      <Perks>
+        <Perk Id="1" Price="0">
+          <Shared Id="1" Tags="ARC"/>
+          <Shared Id="2" Tags="ARC"/>
+          <Shared Id="3" Tags="ARC"/>
+        </Perk>
+        <Perk Id="2" Price="100">
+          <Shared Id="1" Tags="RNG"/>
+          <Shared Id="2" Tags="RNG"/>
+          <Shared Id="3" Tags="RNG"/>
+        </Perk>
+        <Perk Id="3" Price="10">
+          <Action ActionId="2" Tags="ARC"/>
+          <Link AbilityId="1" ActionId="2" Tags="ARC"/>
+        </Perk>
+      </Perks>
+      <SharedPerks>
+        <Ability SharedId="1" AbilityId="1"/>
+        <Action SharedId="2" ActionId="1"/>
+        <Link SharedId="3" AbilityId="1" ActionId="1"/>
+      </SharedPerks>
+    </Job>
+  </Jobs>
+  <Abilities>
+    <Ability Id="1" Name="AimShot" PrepareTime="1.5"/>
+  </Abilities>
+  <Actions>
+    <Damage Id="1" Potency="100"/>
+    <Buff Id="2" BuffId="1"/>
+  </Actions>
+</Data>
