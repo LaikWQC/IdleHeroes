@@ -18,6 +18,12 @@ namespace IdleHeroes.WPF
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+
+            var errors = new NoDataError();
+            var reader = new GameDataXmlReader(errors);
+            reader.ReadFromResources();
+            var doc = reader.Product;
+            var context = doc.CreateDataContext(errors);
         }
     }
 }

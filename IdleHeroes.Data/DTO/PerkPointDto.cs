@@ -6,6 +6,6 @@ namespace IdleHeroes.Data
     {
         public string Id { get; set; }
         public int Price { get; set; }
-        List<PerkValueDto> Values { get; set; }
+        public List<PerkValueDto> Values { get; } = new List<PerkValueDto>();
     }
 }

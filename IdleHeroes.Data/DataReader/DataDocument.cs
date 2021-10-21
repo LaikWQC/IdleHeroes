@@ -4,9 +4,9 @@ namespace IdleHeroes.Data
 {
     public class DataDocument
     {
-        public List<JobDto> Jobs { get; set; }
-        public List<AbilityDto> Abilities { get; set; }
-        public List<ActionDto> Actions { get; set; }
+        public List<JobDto> Jobs { get; } = new List<JobDto>();
+        public List<AbilityDto> Abilities { get; } = new List<AbilityDto>();
+        public List<ActionDto> Actions { get; } = new List<ActionDto>();
 
         public DataContext CreateDataContext(IDataError error)
         {
