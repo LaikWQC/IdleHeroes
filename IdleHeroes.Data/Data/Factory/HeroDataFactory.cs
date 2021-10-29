@@ -12,6 +12,8 @@ namespace IdleHeroes.Data
             _jobs = jobs.ToList();
         }
 
+        public List<string> GetAvailableJobs() => _jobs.Select(x => x.Name).ToList();
+
         public HeroData CreateHero(string jobName)
         {
             var hero = new HeroData(_jobs.Select(x => x.CreateJob()));

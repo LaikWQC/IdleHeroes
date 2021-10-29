@@ -12,15 +12,15 @@
         void IncorrectActionTypeError(string type);
     }
 
-    public class NoDataError : IDataError
+    public class DataErrorBase : IDataError
     {
-        public void IncorrectActionTypeError(string type) { }
-        public void IncorrectPerkTypeError(string type) { }
-        public void NoAbilityError(string id) { }
-        public void NoActionError(string id) { }
-        public void NoSharedPerkError(string id) { }
-        public void RepeatedAbilityIdError(string id) { }
-        public void RepeatedActionIdError(string id) { }
-        public void RepeatedSharedPerkIdError(string id) { }
+        public virtual void IncorrectActionTypeError(string type) { }
+        public virtual void IncorrectPerkTypeError(string type) { }
+        public virtual void NoAbilityError(string id) { }
+        public virtual void NoActionError(string id) { }
+        public virtual void NoSharedPerkError(string id) { }
+        public virtual void RepeatedAbilityIdError(string id) { }
+        public virtual void RepeatedActionIdError(string id) { }
+        public virtual void RepeatedSharedPerkIdError(string id) { }
     }
 }
