@@ -6,12 +6,12 @@ namespace IdleHeroes.Data
     {
         public List<ActionData> Actions { get; } = new List<ActionData>();
 
-        public void AddBuffAction(BuffActionDto action)
+        public void AddAction(BuffActionDto action)
         {
             Actions.Add(new BuffActionData(action.Id, action.BuffId));
         }
 
-        public void AddDamageAction(DamageActionDto action)
+        public void AddAction(DamageActionDto action)
         {
             Actions.Add(new DamageActionData(action.Id, action.Potency));
         }

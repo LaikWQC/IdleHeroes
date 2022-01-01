@@ -17,7 +17,7 @@ namespace IdleHeroes.Data
                 var id = dto.Id;
                 if (context.Abiities.ContainsKey(id))
                     error.RepeatedAbilityIdError(id);
-                else context.Abiities.Add(id, new AbilityData(id, dto.PrepareTime));
+                else context.Abiities.Add(id, new AbilityData(id, dto.CooldownMulti));
             }
 
             var actionBuilder = new ActionDataBuilder();

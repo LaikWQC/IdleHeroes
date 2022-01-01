@@ -1,4 +1,5 @@
 ﻿using IdleHeroes.Data;
+using IdleHeroes.Model;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -19,7 +20,7 @@ namespace IdleHeroes.WPF
         {
             base.OnStartup(e);
 
-            
+            new DataLoader().LoadData(new DataErrorBase());
         }
     }
 }

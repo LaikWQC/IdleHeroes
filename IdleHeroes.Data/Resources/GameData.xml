@@ -25,10 +25,10 @@
     </Job>
   </Jobs>
   <Abilities>
-    <Ability Id="1" Name="AimShot" PrepareTime="1.5"/>
+    <Ability Id="1" Name="AimedShot" Cd="1"/>
   </Abilities>
   <Actions>
-    <Damage Id="1" Potency="100"/>
+    <Damage Id="1" Potency="1"/>
     <Buff Id="2" BuffId="1"/>
   </Actions>
 </Data>

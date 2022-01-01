@@ -2,7 +2,7 @@
 {
     public interface IActionDataBuilder
     {
-        void AddDamageAction(DamageActionDto action);
-        void AddBuffAction(BuffActionDto action);
+        void AddAction(DamageActionDto action);
+        void AddAction(BuffActionDto action);
     }
 }

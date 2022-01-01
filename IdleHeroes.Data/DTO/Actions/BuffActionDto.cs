@@ -6,7 +6,7 @@
 
         public override void CreateAction(IActionDataBuilder builder)
         {
-            builder.AddBuffAction(this);
+            builder.AddAction(this);
         }
     }
 }

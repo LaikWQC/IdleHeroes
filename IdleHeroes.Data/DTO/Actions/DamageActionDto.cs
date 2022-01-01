@@ -2,11 +2,11 @@
 {
     public class DamageActionDto : ActionDto
     {
-        public int Potency { get; set; }
+        public double Potency { get; set; }
 
         public override void CreateAction(IActionDataBuilder builder)
         {
-            builder.AddDamageAction(this);
+            builder.AddAction(this);
         }
     }
 }
