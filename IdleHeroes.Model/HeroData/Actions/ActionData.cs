@@ -1,4 +1,4 @@
-﻿namespace IdleHeroes.Data
+﻿namespace IdleHeroes.Model
 {
     public abstract class ActionData
     {

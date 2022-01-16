@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using IdleHeroes.Data;
+using System.Collections.Generic;
 
-namespace IdleHeroes.Data
+namespace IdleHeroes.Model
 {
     public class ActionDataBuilder : IActionDataBuilder
     {

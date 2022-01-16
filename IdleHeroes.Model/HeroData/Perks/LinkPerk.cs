@@ -1,11 +1,11 @@
-﻿namespace IdleHeroes.Data
+﻿namespace IdleHeroes.Model
 {
-    public class LinkPerkData : PerkData
+    public class LinkPerk : Perk
     {
         private readonly string _abilityId;
         private readonly string _actionId;
 
-        public LinkPerkData(string abilityId, string actionId)
+        public LinkPerk(string abilityId, string actionId)
         {
             _abilityId = abilityId;
             _actionId = actionId;

@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 
-namespace IdleHeroes.Data
+namespace IdleHeroes.Model
 {
     public class PerkPointFactory
     {
@@ -17,7 +17,7 @@ namespace IdleHeroes.Data
             _values = values.ToList();
         }
 
-        public PerkPoint CreatePerk(JobData job, PerksCollector collector)
+        public PerkPoint CreatePerk(JobModel job, PerksCollector collector)
         {
             return new PerkPoint(_id, job, collector, _price, _values);
         }

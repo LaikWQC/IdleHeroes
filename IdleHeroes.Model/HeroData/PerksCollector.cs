@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace IdleHeroes.Data
+namespace IdleHeroes.Model
 {
     public class PerksCollector
     {
-        private Dictionary<PerkData, HashSet<string>> _perks = new Dictionary<PerkData, HashSet<string>>();
+        private Dictionary<Perk, HashSet<string>> _perks = new Dictionary<Perk, HashSet<string>>();
 
-        public void AddPerk(PerkData perk, IEnumerable<string> newTags)
+        public void AddPerk(Perk perk, IEnumerable<string> newTags)
         {
             if (!_perks.TryGetValue(perk, out var tags))
                 tags = _perks[perk] = new HashSet<string>();
@@ -15,7 +15,7 @@ namespace IdleHeroes.Data
                 tags.Add(tag);
         }
 
-        public IEnumerable<PerkData> GetPerks(ICollection<string> tags)
+        public IEnumerable<Perk> GetPerks(ICollection<string> tags)
         {
             return _perks.Where(x => tags.Any(t => x.Value.Contains(t))).Select(x => x.Key);
         }

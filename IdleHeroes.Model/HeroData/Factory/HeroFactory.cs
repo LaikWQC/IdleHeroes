@@ -1,22 +1,22 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace IdleHeroes.Data
+namespace IdleHeroes.Model
 {
-    public class HeroDataFactory
+    public class HeroFactory
     {
-        private List<JobDataFactory> _jobs;
+        private List<JobFactory> _jobs;
 
-        public HeroDataFactory(IEnumerable<JobDataFactory> jobs)
+        public HeroFactory(IEnumerable<JobFactory> jobs)
         {
             _jobs = jobs.ToList();
         }
 
         public List<string> GetAvailableJobs() => _jobs.Select(x => x.Name).ToList();
 
-        public HeroData CreateHero(string jobName)
+        public HeroModel CreateHero(string jobName)
         {
-            var hero = new HeroData(_jobs.Select(x => x.CreateJob()));
+            var hero = new HeroModel(_jobs.Select(x => x.CreateJob()));
             hero.ChangeJob(jobName);
             return hero;
         }

@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace IdleHeroes.Data
+namespace IdleHeroes.Model
 {
     public class PerkPoint
     {
-        private readonly JobData _owner;
+        private readonly JobModel _owner;
         private readonly PerksCollector _collector;
         private List<PerkValue> _values;
 
-        public PerkPoint(string id, JobData owner, PerksCollector collector, int price, IEnumerable<PerkValue> values)
+        public PerkPoint(string id, JobModel owner, PerksCollector collector, int price, IEnumerable<PerkValue> values)
         {
             Id = id;
             _owner = owner;
@@ -33,7 +33,7 @@ namespace IdleHeroes.Data
 
             _owner.Experience -= Price;
             foreach (var value in _values)
-                _collector.AddPerk(value.Data, value.Tags);
+                _collector.AddPerk(value.Perk, value.Tags);
             IsBought = true;
             return true;
         }

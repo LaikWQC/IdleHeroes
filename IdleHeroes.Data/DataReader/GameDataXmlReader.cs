@@ -35,7 +35,7 @@ namespace IdleHeroes.Data
                 Product.Jobs.Add(job);
 
                 var xSharedPerks = xJob.Elements("SharedPerks").Elements().ToList();
-                var sharedPerks = new Dictionary<string, PerkDataDto>();
+                var sharedPerks = new Dictionary<string, PerkDto>();
                 foreach(var xSharedPerk in xSharedPerks)
                 {
                     var id = xSharedPerk.ParseToString("SharedId");
@@ -97,16 +97,16 @@ namespace IdleHeroes.Data
             }
         }
 
-        private PerkDataDto CreatePerkData(XElement xPerk)
+        private PerkDto CreatePerkData(XElement xPerk)
         {
             switch(xPerk.Name.LocalName)
             {
                 case "Ability":
-                    return new AbilityPerkDataDto() { AbilityId = xPerk.ParseToString("AbilityId") };
+                    return new AbilityPerkDto() { AbilityId = xPerk.ParseToString("AbilityId") };
                 case "Action":
-                    return new ActionPerkDataDto() { ActionId = xPerk.ParseToString("ActionId") };
+                    return new ActionPerkDto() { ActionId = xPerk.ParseToString("ActionId") };
                 case "Link":
-                    return new LinkPerkDataDto() 
+                    return new LinkPerkDto() 
                     { 
                         ActionId = xPerk.ParseToString("ActionId"), 
                         AbilityId = xPerk.ParseToString("AbilityId") 
@@ -117,7 +117,7 @@ namespace IdleHeroes.Data
             }
         }
 
-        private PerkValueDto CreatePerkValue(XElement xPerk, Dictionary<string,PerkDataDto> sharedPerks)
+        private PerkValueDto CreatePerkValue(XElement xPerk, Dictionary<string,PerkDto> sharedPerks)
         {
             var value = new PerkValueDto() { Tags = xPerk.ParseTags().ToList() };
             switch (xPerk.Name.LocalName)

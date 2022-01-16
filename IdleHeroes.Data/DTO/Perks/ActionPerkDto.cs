@@ -1,10 +1,10 @@
 ﻿namespace IdleHeroes.Data
 {
-    public class ActionPerkDataDto : PerkDataDto
+    public class ActionPerkDto : PerkDto
     {
         public string ActionId { get; set; }
 
-        public override void CreatePerk(IPerkDataBuilder builder)
+        public override void CreatePerk(IPerkBuilder builder)
         {
             builder.AddActionPerk(this);
         }

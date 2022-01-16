@@ -20,7 +20,7 @@ namespace IdleHeroes.WPF
         {
             base.OnStartup(e);
 
-            DataLoader.LoadData(new DataErrorBase());
+            HeroDataLoader.LoadData(new DataErrorBase());
         }
     }
 }

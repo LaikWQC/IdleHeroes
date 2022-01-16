@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace IdleHeroes.Data
+namespace IdleHeroes.Model
 {
-    public class JobData
+    public class JobModel
     {
         private PerksCollector _collector;
 
-        public JobData(string name, Func<JobData, IEnumerable<PerkPoint>> createPerksDelegate, PerksCollector collector, IEnumerable<string> tags)
+        public JobModel(string name, Func<JobModel, IEnumerable<PerkPoint>> createPerksDelegate, PerksCollector collector, IEnumerable<string> tags)
         {
             Name = name;
             Perks = createPerksDelegate(this).ToList().AsReadOnly();
@@ -21,6 +21,6 @@ namespace IdleHeroes.Data
         public string Name { get; }
         public int Experience { get; set; }
 
-        public IEnumerable<PerkData> GetPerks(ICollection<string> tags) => _collector.GetPerks(tags);
+        public IEnumerable<Perk> GetPerks(ICollection<string> tags) => _collector.GetPerks(tags);
     }
 }

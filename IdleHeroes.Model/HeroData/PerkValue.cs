@@ -1,17 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace IdleHeroes.Data
+namespace IdleHeroes.Model
 {
     public class PerkValue
     {
-        public PerkValue(PerkData data, IEnumerable<string> tags)
+        public PerkValue(Perk perk, IEnumerable<string> tags)
         {
-            Data = data;
+            Perk = perk;
             Tags = tags.ToList().AsReadOnly();
         }
 
-        public PerkData Data { get; }
+        public Perk Perk { get; }
         public ICollection<string> Tags { get; }
     }
 }
