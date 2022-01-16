@@ -5,9 +5,9 @@ using System.Linq;
 
 namespace IdleHeroes.Model
 {
-    public class DataLoader
+    public static class DataLoader
     {
-        public void LoadData(IDataError errors)
+        public static void LoadData(IDataError errors)
         {
             var reader = new GameDataXmlReader(errors);
             reader.ReadFromResources();

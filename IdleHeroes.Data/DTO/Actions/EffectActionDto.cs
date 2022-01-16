@@ -1,8 +1,8 @@
 ﻿namespace IdleHeroes.Data
 {
-    public class BuffActionDto : ActionDto
+    public class EffectActionDto : ActionDto
     {
-        public string BuffId { get; set; }
+        public string EffectId { get; set; }
 
         public override void CreateAction(IActionDataBuilder builder)
         {

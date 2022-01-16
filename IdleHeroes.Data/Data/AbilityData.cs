@@ -2,13 +2,13 @@
 {
     public class AbilityData
     {
-        public AbilityData(string id, double cooldownMulti)
+        public AbilityData(string id, int cooldownMulti)
         {
             Id = id;
             CooldownMulti = cooldownMulti;
         }
 
         public string Id { get; }
-        public double CooldownMulti { get; }
+        public int CooldownMulti { get; }
     }
 }

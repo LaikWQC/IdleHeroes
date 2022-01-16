@@ -6,9 +6,9 @@ namespace IdleHeroes.Data
     {
         public List<ActionData> Actions { get; } = new List<ActionData>();
 
-        public void AddAction(BuffActionDto action)
+        public void AddAction(EffectActionDto action)
         {
-            Actions.Add(new BuffActionData(action.Id, action.BuffId));
+            Actions.Add(new EffectActionData(action.Id, action.EffectId));
         }
 
         public void AddAction(DamageActionDto action)

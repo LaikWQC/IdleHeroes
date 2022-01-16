@@ -2,9 +2,9 @@
 {
     public class DamageActionData : ActionData
     {
-        private readonly double _potency;
+        private readonly int _potency;
 
-        public DamageActionData(string id, double potency) : base(id)
+        public DamageActionData(string id, int potency) : base(id)
         {
             _potency = potency;
         }

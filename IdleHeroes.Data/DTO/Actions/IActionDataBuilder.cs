@@ -3,6 +3,6 @@
     public interface IActionDataBuilder
     {
         void AddAction(DamageActionDto action);
-        void AddAction(BuffActionDto action);
+        void AddAction(EffectActionDto action);
     }
 }

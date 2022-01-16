@@ -67,7 +67,7 @@ namespace IdleHeroes.Data
                 {
                     Id = xAbility.ParseId(),
                     Name = xAbility.ParseName(),
-                    CooldownMulti = xAbility.ParseToDouble("Cd")
+                    CooldownMulti = xAbility.ParseToInt("Cd")
                 });
             }
 
@@ -80,14 +80,14 @@ namespace IdleHeroes.Data
                         Product.Actions.Add(new DamageActionDto()
                         {
                             Id = xAction.ParseId(),
-                            Potency = xAction.ParseToDouble("Potency")
+                            Potency = xAction.ParseToInt("Potency")
                         });
                         break;
-                    case "Buff":
-                        Product.Actions.Add(new BuffActionDto()
+                    case "Effect":
+                        Product.Actions.Add(new EffectActionDto()
                         {
                             Id = xAction.ParseId(),
-                            BuffId = xAction.ParseToString("BuffId")
+                            EffectId = xAction.ParseToString("EffectId")
                         });
                         break;
                     default:
