@@ -1,19 +1,25 @@
 ﻿using IdleHeroes.Data;
+using System.Collections.Generic;
 
 namespace IdleHeroes.Model
 {
-    public class PerkConverter
+    public class UniquePerkConverter
     {
         private readonly PerkBuilder _builder;
+        private Dictionary<PerkDto, Perk> _createdPerks = new Dictionary<PerkDto, Perk>();
 
-        public PerkConverter(HeroDataContext context, IDataError error)
+        public UniquePerkConverter(HeroDataContext context, IDataError error)
         {
             _builder = new PerkBuilder(context, error);
         }
 
         public Perk Convert(PerkDto dto)
         {
+            if (_createdPerks.TryGetValue(dto, out var perk))
+                return perk;
+
             dto.CreatePerk(_builder);
+            _createdPerks[dto] = _builder.Perk;
             return _builder.Perk;
         }
 

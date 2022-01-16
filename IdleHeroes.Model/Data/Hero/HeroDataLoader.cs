@@ -13,7 +13,7 @@ namespace IdleHeroes.Model
             reader.ReadFromResources();
             var doc = reader.Product;
             var context = doc.CreateDataContext(errors);
-            var perkConverter = new PerkConverter(context, errors);
+            var perkConverter = new UniquePerkConverter(context, errors);
 
             var jobFactories = new List<JobFactory>();
             foreach(var job in doc.Jobs)

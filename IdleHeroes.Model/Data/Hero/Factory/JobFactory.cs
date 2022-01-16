@@ -17,8 +17,7 @@ namespace IdleHeroes.Model
 
         public JobModel CreateJob()
         {
-            var collector = new PerksCollector();
-            return new JobModel(Name, job => _perks.Select(x => x.CreatePerk(job, collector)), collector, _tags);
+            return new JobModel(Name, _perks, _tags);
         }
 
         public string Name { get; }

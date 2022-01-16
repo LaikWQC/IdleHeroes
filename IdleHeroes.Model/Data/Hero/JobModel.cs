@@ -8,11 +8,11 @@ namespace IdleHeroes.Model
     {
         private PerksCollector _collector;
 
-        public JobModel(string name, Func<JobModel, IEnumerable<PerkPoint>> createPerksDelegate, PerksCollector collector, IEnumerable<string> tags)
+        public JobModel(string name, IEnumerable<PerkPointFactory> perkFactories, IEnumerable<string> tags)
         {
             Name = name;
-            Perks = createPerksDelegate(this).ToList().AsReadOnly();
-            _collector = collector;
+            _collector = new PerksCollector();
+            Perks = perkFactories.Select(x => x.CreatePerk(this, _collector)).ToList().AsReadOnly();
             AvailableTags = tags.ToList().AsReadOnly();
         }
 

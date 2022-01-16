@@ -42,7 +42,7 @@ namespace IdleHeroes.Data
                     if (sharedPerks.ContainsKey(id))
                         _error.RepeatedSharedPerkIdError(id);
                     else
-                        sharedPerks.Add(id, CreatePerkData(xSharedPerk));
+                        sharedPerks.Add(id, CreatePerk(xSharedPerk));
                 }
                 
                 var xPerkPoints = xJob.Elements("Perks").Elements().ToList();
@@ -97,7 +97,7 @@ namespace IdleHeroes.Data
             }
         }
 
-        private PerkDto CreatePerkData(XElement xPerk)
+        private PerkDto CreatePerk(XElement xPerk)
         {
             switch(xPerk.Name.LocalName)
             {
@@ -133,7 +133,7 @@ namespace IdleHeroes.Data
                     }
                     break;
                 default: 
-                    value.Perk = CreatePerkData(xPerk);
+                    value.Perk = CreatePerk(xPerk);
                     break;
             }
             return value;
