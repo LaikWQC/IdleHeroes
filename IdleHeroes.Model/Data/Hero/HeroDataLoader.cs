@@ -1,4 +1,5 @@
 ﻿using IdleHeroes.Data;
+using IdleHeroes.Model.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,9 +26,7 @@ namespace IdleHeroes.Model
             }
             var heroFactory = new HeroFactory(jobFactories);
 
-            //TODO загрузить в сервис
-            var availableJobs = heroFactory.GetAvailableJobs(); // -
-            var hero = heroFactory.CreateHero(availableJobs.First()); // -
+            HeroService.Instance.Initialize(heroFactory);
         }
     }
 }

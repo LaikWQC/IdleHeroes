@@ -2,11 +2,16 @@
 {
     public class EffectActionData : ActionData
     {
-        private readonly string _buffId; //TODO заменить на ссылку на баф
+        private readonly string _effectId; //TODO заменить на ссылку на еффект
 
         public EffectActionData(string id, string buffId) : base(id)
         {
-            _buffId = buffId;
+            _effectId = buffId;
+        }
+
+        public override void CreateAction(HeroStatistic statistic)
+        {
+            //TODO
         }
     }
 }

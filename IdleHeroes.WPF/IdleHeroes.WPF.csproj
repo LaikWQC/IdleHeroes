@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MvvmLightLibsStd10" Version="5.4.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\IdleHeroes.Data\IdleHeroes.Data.csproj" />
     <ProjectReference Include="..\IdleHeroes.Model\IdleHeroes.Model.csproj" />
   </ItemGroup>

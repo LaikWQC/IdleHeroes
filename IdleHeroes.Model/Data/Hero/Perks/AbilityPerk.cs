@@ -8,5 +8,10 @@
         {
             _ability = ability;
         }
+
+        public override void Apply(HeroStatistic statistic)
+        {
+            _ability.CreateAbility(statistic);
+        }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using IdleHeroes.Data;
 using IdleHeroes.Model;
+using IdleHeroes.Model.Services;
+using IdleHeroes.WPF.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -21,6 +23,8 @@ namespace IdleHeroes.WPF
             base.OnStartup(e);
 
             HeroDataLoader.LoadData(new DataErrorBase());
+
+            new MainWindow() { DataContext = new MainViewModel() }.Show();
         }
     }
 }

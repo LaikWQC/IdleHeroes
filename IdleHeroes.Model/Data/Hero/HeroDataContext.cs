@@ -23,15 +23,11 @@ namespace IdleHeroes.Model
                 else context.Abiities.Add(id, new AbilityData(id, dto.CooldownMulti));
             }
 
-            var actionBuilder = new ActionDataBuilder();
+            var actionBuilder = new ActionDataBuilder(error);
             foreach (var dto in doc.Actions)
-            {
-                var id = dto.Id;
-                if (context.Actions.ContainsKey(id))
-                    error.RepeatedActionIdError(id);
                 dto.CreateAction(actionBuilder);
-            }
-            actionBuilder.Actions.ForEach(x => context.Actions.Add(x.Id, x));
+            foreach(var kvp in actionBuilder.Actions)
+                context.Actions.Add(kvp.Key, kvp.Value);
 
             return context;
         }

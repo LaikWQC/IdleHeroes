@@ -10,5 +10,12 @@
             _abilityId = abilityId;
             _actionId = actionId;
         }
+
+        public override void Apply(HeroStatistic statistic)
+        {
+            if (statistic.Abilities.TryGetValue(_abilityId, out var ability) &&
+                statistic.Actions.TryGetValue(_actionId, out var action))
+                ability.AddAction(action.Product);
+        }
     }
 }

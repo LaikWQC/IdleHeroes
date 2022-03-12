@@ -8,5 +8,10 @@
         {
             _action = action;
         }
+
+        public override void Apply(HeroStatistic statistic)
+        {
+            _action.CreateAction(statistic);
+        }
     }
 }

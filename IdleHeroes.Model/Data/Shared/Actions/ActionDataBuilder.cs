@@ -5,16 +5,27 @@ namespace IdleHeroes.Model
 {
     public class ActionDataBuilder : IActionDataBuilder
     {
-        public List<ActionData> Actions { get; } = new List<ActionData>();
+        private readonly IDataError _error;
+
+        public ActionDataBuilder(IDataError error)
+        {
+            _error = error;
+        }
+
+        public Dictionary<string, ActionData> Actions { get; } = new Dictionary<string, ActionData>();
 
         public void AddAction(EffectActionDto action)
         {
-            Actions.Add(new EffectActionData(action.Id, action.EffectId));
+            if (Actions.ContainsKey(action.Id))
+                _error.RepeatedActionIdError(action.Id);
+            else Actions.Add(action.Id, new EffectActionData(action.Id, action.EffectId));
         }
 
         public void AddAction(DamageActionDto action)
         {
-            Actions.Add(new DamageActionData(action.Id, action.Potency));
+            if (Actions.ContainsKey(action.Id))
+                _error.RepeatedActionIdError(action.Id);
+            else Actions.Add(action.Id, new DamageActionData(action.Id, action.Potency));
         }
     }
 }
