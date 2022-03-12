@@ -1,7 +1,7 @@
 ﻿using IdleHeroes.Data;
 using IdleHeroes.Model;
 using IdleHeroes.Model.Services;
-using IdleHeroes.WPF.ViewModels;
+using IdleHeroes.WPF.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -21,6 +21,8 @@ namespace IdleHeroes.WPF
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+
+            PropertyService.Instance.Initialize(new MvvmPropertyFactory());
 
             HeroDataLoader.LoadData(new DataErrorBase());
 

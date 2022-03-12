@@ -11,14 +11,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace IdleHeroes.WPF.Views
+namespace IdleHeroes.WPF.View
 {
     /// <summary>
-    /// Логика взаимодействия для HeroesTabView.xaml
+    /// Логика взаимодействия для RoomView.xaml
     /// </summary>
-    public partial class HeroesTabView : UserControl
+    public partial class RoomView : UserControl
     {
-        public HeroesTabView()
+        public RoomView()
         {
             InitializeComponent();
         }

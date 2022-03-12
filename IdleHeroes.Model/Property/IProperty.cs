@@ -4,8 +4,9 @@ using System.Text;
 
 namespace IdleHeroes.Model
 {
-    public interface IRoomContext
+    public interface IProperty<T>
     {
-        void Dispose();
+        public T Value { get; set; }
+        event Action ValueChanged;
     }
 }

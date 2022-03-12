@@ -17,7 +17,7 @@ namespace IdleHeroes.Model
         }
 
         public int CooldownMulti { get; private set; }
-        private List<ActionModel> _actions;
+        private List<ActionModel> _actions = new List<ActionModel>();
         public IReadOnlyCollection<ActionModel> Actions { get; }
 
         public class Builder : IAbilityBuilder

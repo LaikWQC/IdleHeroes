@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
 
-namespace IdleHeroes.WPF.ViewModels
+namespace IdleHeroes.WPF.ViewModel
 {
     public class MainViewModel
     {

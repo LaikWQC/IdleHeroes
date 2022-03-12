@@ -3,7 +3,7 @@ using IdleHeroes.Model.Services;
 using System;
 using System.Collections.ObjectModel;
 
-namespace IdleHeroes.WPF.ViewModels
+namespace IdleHeroes.WPF.ViewModel
 {
     public class HeroesTabViewModel
     {
@@ -12,11 +12,11 @@ namespace IdleHeroes.WPF.ViewModels
             HeroService.Instance.NewHeroAdded += OnHeroAdded;
         }
 
-        public ObservableCollection<RoomViewModel> Rooms { get; } = new ObservableCollection<RoomViewModel>();
+        public ObservableCollection<RoomModel> Rooms { get; } = new ObservableCollection<RoomModel>();
 
         private void OnHeroAdded(HeroModel hero)
         {
-            Rooms.Add(new RoomViewModel(hero));
+            Rooms.Add(new RoomModel(hero));
         }
     }
 }

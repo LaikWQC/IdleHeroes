@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="LaikWQC.Utils" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\IdleHeroes.Data\IdleHeroes.Data.csproj" />
   </ItemGroup>
 
