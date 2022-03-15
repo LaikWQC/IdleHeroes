@@ -2,16 +2,17 @@
 {
     public class EffectActionData : ActionData
     {
-        private readonly string _effectId; //TODO заменить на ссылку на еффект
+        private readonly EffectData _effect;
 
-        public EffectActionData(string id, string buffId) : base(id)
+        public EffectActionData(string id, EffectData effect) : base(id)
         {
-            _effectId = buffId;
+            _effect = effect;
         }
 
         public override void CreateAction(HeroStatistic statistic)
         {
-            //TODO
+            var factory = _effect.EnsureCreateEffectFactory(statistic);
+            statistic.Actions[_id] = new EffectActionModel.Builder(factory); 
         }
     }
 }

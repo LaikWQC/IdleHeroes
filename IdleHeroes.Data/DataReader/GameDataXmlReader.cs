@@ -24,17 +24,17 @@ namespace IdleHeroes.Data
         {
             Product = new DataDocument();
 
-            var xJobs = xDoc.Root.Elements("Jobs").Elements("Job").ToList();
+            var xJobs = xDoc.Root.Elements("Jobs").Elements("Job");
             foreach(var xJob in xJobs)
             {
                 var job = new JobDto()
                 {
                     Name = xJob.ParseName(),
-                    Tags = xJob.ParseTags(_error).ToList()
+                    Tags = xJob.ParseTags().ToList()
                 };
                 Product.Jobs.Add(job);
 
-                var xSharedPerks = xJob.Elements("SharedPerks").Elements().ToList();
+                var xSharedPerks = xJob.Elements("SharedPerks").Elements();
                 var sharedPerks = new Dictionary<string, PerkDto>();
                 foreach(var xSharedPerk in xSharedPerks)
                 {
@@ -45,7 +45,7 @@ namespace IdleHeroes.Data
                         sharedPerks.Add(id, CreatePerk(xSharedPerk));
                 }
                 
-                var xPerkPoints = xJob.Elements("Perks").Elements().ToList();
+                var xPerkPoints = xJob.Elements("Perks").Elements();
                 foreach(var xPerkPoint in xPerkPoints)
                 {
                     var perkPoint = new PerkPointDto()
@@ -60,7 +60,7 @@ namespace IdleHeroes.Data
                 }
             }
 
-            var xAbilities = xDoc.Root.Elements("Abilities").Elements("Ability").ToList();
+            var xAbilities = xDoc.Root.Elements("Abilities").Elements();
             foreach(var xAbility in xAbilities)
             {
                 Product.Abilities.Add(new AbilityDto()
@@ -71,7 +71,7 @@ namespace IdleHeroes.Data
                 });
             }
 
-            var xActions = xDoc.Root.Elements("Actions").Elements().ToList();
+            var xActions = xDoc.Root.Elements("Actions").Elements();
             foreach(var xAction in xActions)
             {
                 switch(xAction.Name.LocalName)
@@ -92,6 +92,44 @@ namespace IdleHeroes.Data
                         break;
                     default:
                         _error.IncorrectActionTypeError(xAction.Name.LocalName);
+                        break;
+                }
+            }
+
+            var xEffects = xDoc.Root.Elements("Effects").Elements().ToList();
+            foreach (var xEffect in xEffects)
+            {
+                switch (xEffect.Name.LocalName)
+                {
+                    case "MinDamage":
+                        Product.Effects.Add(new MinDamageEffectDto()
+                        {
+                            Id = xEffect.ParseId(),
+                            TargetType = xEffect.ParseToEffectTargetType(),
+                            Duration = xEffect.ParseToInt("Duration"),
+                            Value = xEffect.ParseToInt("Value")
+                        });
+                        break;
+                    case "DoT":
+                        Product.Effects.Add(new DoTEffectDto()
+                        {
+                            Id = xEffect.ParseId(),
+                            TargetType = xEffect.ParseToEffectTargetType(),
+                            Duration = xEffect.ParseToInt("Duration"),
+                            Potency = xEffect.ParseToInt("Potency")
+                        });
+                        break;
+                    case "IncomingDamage":
+                        Product.Effects.Add(new IncomingDamageEffectDto()
+                        {
+                            Id = xEffect.ParseId(),
+                            TargetType = xEffect.ParseToEffectTargetType(),
+                            Duration = xEffect.ParseToInt("Duration"),
+                            Value = xEffect.ParseToInt("Value")
+                        });
+                        break;
+                    default:
+                        _error.IncorrectEffectTypeError(xEffect.Name.LocalName);
                         break;
                 }
             }
@@ -119,7 +157,7 @@ namespace IdleHeroes.Data
 
         private PerkValueDto CreatePerkValue(XElement xPerk, Dictionary<string,PerkDto> sharedPerks)
         {
-            var value = new PerkValueDto() { Tags = xPerk.ParseTags(_error).ToList() };
+            var value = new PerkValueDto() { Tags = xPerk.ParseTags().ToList() };
             switch (xPerk.Name.LocalName)
             {
                 case "Shared":
@@ -150,11 +188,13 @@ namespace IdleHeroes.Data
         {
             return element.ParseToString("Name");
         }
-        public static IEnumerable<Tags> ParseTags(this XElement element, IDataError error = null)
+        public static IEnumerable<Tags> ParseTags(this XElement element)
         {
-            foreach(var value in element.ParseToStringsCollection("Tags"))
-                if (value.TryParseToEnum(error, out Tags tag))
-                    yield return tag;
+            return element.ParseToStringsCollection("Tags").Select(x => x.ParseToEnum<Tags>());            
+        }
+        public static EffectTargetTypes ParseToEffectTargetType(this XElement element)
+        {
+            return element.ParseToEnum<EffectTargetTypes>("Target");
         }
 
         public static string ParseToString(this XElement element, string attribute)
@@ -172,7 +212,7 @@ namespace IdleHeroes.Data
         }
         public static IEnumerable<string> ParseToStringsCollection(this XAttribute attribute)
         {
-            return attribute.Value.ToString().Split(",", System.StringSplitOptions.RemoveEmptyEntries);
+            return attribute.Value.ToString().Split(",", StringSplitOptions.RemoveEmptyEntries);
         }
 
         public static int ParseToInt(this XElement element, string attribute)
@@ -193,12 +233,18 @@ namespace IdleHeroes.Data
             return double.Parse(attribute.Value.ToString(), System.Globalization.CultureInfo.InvariantCulture);
         }
 
-        public static bool TryParseToEnum<T>(this string value, IDataError error, out T result) where T : struct
+        public static T ParseToEnum<T>(this XElement element, string attribute) where T : struct
         {
-            if (Enum.TryParse(value, out result))
-                return true;
-            error?.IncorrectTag(value);
-            return false;
+            return element.Attribute(attribute).ParseToEnum<T>();
+        }
+        public static T ParseToEnum<T>(this XAttribute attribute) where T : struct
+        {
+            return attribute.Value.ToString().ParseToEnum<T>();
+        }
+        public static T ParseToEnum<T>(this string value) where T : struct
+        {
+            Enum.TryParse(value, out T result);
+            return result;
         }
     }
 }

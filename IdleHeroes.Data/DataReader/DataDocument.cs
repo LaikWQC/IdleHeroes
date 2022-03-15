@@ -7,5 +7,6 @@ namespace IdleHeroes.Data
         public List<JobDto> Jobs { get; } = new List<JobDto>();
         public List<AbilityDto> Abilities { get; } = new List<AbilityDto>();
         public List<ActionDto> Actions { get; } = new List<ActionDto>();
+        public List<EffectDto> Effects { get; } = new List<EffectDto>();
     }
 }

@@ -24,6 +24,8 @@ namespace IdleHeroes.Model
             }
 
             var actionBuilder = new ActionDataBuilder(error);
+            foreach (var dto in doc.Effects)
+                dto.CreateEffect(actionBuilder);
             foreach (var dto in doc.Actions)
                 dto.CreateAction(actionBuilder);
             foreach(var kvp in actionBuilder.Actions)

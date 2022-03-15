@@ -8,6 +8,7 @@ namespace IdleHeroes.Model
         public int Power { get; set; }
         public Dictionary<string, IAbilityBuilder> Abilities { get; } = new Dictionary<string, IAbilityBuilder>();
         public Dictionary<string, IActionBuilder> Actions { get; } = new Dictionary<string, IActionBuilder>();
+        public Dictionary<EffectData, IEffectFactoryBuilder> Effects { get; } = new Dictionary<EffectData, IEffectFactoryBuilder>();
         public void Finish()
         {
             foreach (var action in Actions.Values)
