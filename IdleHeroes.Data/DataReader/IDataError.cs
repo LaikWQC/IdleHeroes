@@ -10,6 +10,7 @@
         void RepeatedSharedPerkIdError(string id);
         void IncorrectPerkTypeError(string type);
         void IncorrectActionTypeError(string type);
+        void IncorrectTag(string value);
     }
 
     public class DataErrorBase : IDataError
@@ -22,5 +23,6 @@
         public virtual void RepeatedAbilityIdError(string id) { }
         public virtual void RepeatedActionIdError(string id) { }
         public virtual void RepeatedSharedPerkIdError(string id) { }
+        public void IncorrectTag(string value) { }
     }
 }

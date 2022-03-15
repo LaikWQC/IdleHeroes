@@ -30,7 +30,7 @@ namespace IdleHeroes.Data
                 var job = new JobDto()
                 {
                     Name = xJob.ParseName(),
-                    Tags = xJob.ParseTags().ToList()
+                    Tags = xJob.ParseTags(_error).ToList()
                 };
                 Product.Jobs.Add(job);
 
@@ -119,7 +119,7 @@ namespace IdleHeroes.Data
 
         private PerkValueDto CreatePerkValue(XElement xPerk, Dictionary<string,PerkDto> sharedPerks)
         {
-            var value = new PerkValueDto() { Tags = xPerk.ParseTags().ToList() };
+            var value = new PerkValueDto() { Tags = xPerk.ParseTags(_error).ToList() };
             switch (xPerk.Name.LocalName)
             {
                 case "Shared":
@@ -150,9 +150,11 @@ namespace IdleHeroes.Data
         {
             return element.ParseToString("Name");
         }
-        public static IEnumerable<string> ParseTags(this XElement element)
+        public static IEnumerable<Tags> ParseTags(this XElement element, IDataError error = null)
         {
-            return element.ParseToStringsCollection("Tags");
+            foreach(var value in element.ParseToStringsCollection("Tags"))
+                if (value.TryParseToEnum(error, out Tags tag))
+                    yield return tag;
         }
 
         public static string ParseToString(this XElement element, string attribute)
@@ -189,6 +191,14 @@ namespace IdleHeroes.Data
         public static double ParseToDouble(this XAttribute attribute)
         {
             return double.Parse(attribute.Value.ToString(), System.Globalization.CultureInfo.InvariantCulture);
+        }
+
+        public static bool TryParseToEnum<T>(this string value, IDataError error, out T result) where T : struct
+        {
+            if (Enum.TryParse(value, out result))
+                return true;
+            error?.IncorrectTag(value);
+            return false;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IdleHeroes.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,7 +9,7 @@ namespace IdleHeroes.Model
     {
         private PerksCollector _collector;
 
-        public JobModel(string name, IEnumerable<PerkPointFactory> perkFactories, IEnumerable<string> tags)
+        public JobModel(string name, IEnumerable<PerkPointFactory> perkFactories, IEnumerable<Tags> tags)
         {
             Name = name;
             _collector = new PerksCollector();
@@ -17,10 +18,10 @@ namespace IdleHeroes.Model
         }
 
         public ICollection<PerkPoint> Perks { get; }
-        public ICollection<string> AvailableTags { get; }
+        public ICollection<Tags> AvailableTags { get; }
         public string Name { get; }
         public int Experience { get; set; }
 
-        public IEnumerable<Perk> GetPerks(ICollection<string> tags) => _collector.GetPerks(tags);
+        public IEnumerable<Perk> GetPerks(ICollection<Tags> tags) => _collector.GetPerks(tags);
     }
 }
