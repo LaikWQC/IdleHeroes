@@ -8,6 +8,6 @@
 
     public abstract class ActionModel
     {
-        public abstract void UseAction();
+        public abstract void UseAction(ITarget target);
     }
 }

@@ -10,6 +10,6 @@ namespace IdleHeroes.Model
     {
         public int Duration { get; protected set; }
         public EffectTargetTypes TargetType { get; protected set; }
-        public abstract void ApplyEffect();
+        public abstract void ApplyEffect(ITarget target);
     }
 }

@@ -9,10 +9,9 @@
             _effectFactory = effectFactory;
         }
 
-        public override void UseAction()
+        public override void UseAction(ITarget target)
         {
-            _effectFactory.ApplyEffect();
-            //TODO
+            _effectFactory.ApplyEffect(target);
         }
 
         public class Builder : IActionBuilder

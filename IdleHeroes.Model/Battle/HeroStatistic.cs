@@ -11,6 +11,8 @@ namespace IdleHeroes.Model
         public Dictionary<EffectData, IEffectFactoryBuilder> Effects { get; } = new Dictionary<EffectData, IEffectFactoryBuilder>();
         public void Finish()
         {
+            foreach (var ability in Abilities.Values)
+                ability.Finish();
             foreach (var action in Actions.Values)
                 action.Finish(this);
         }

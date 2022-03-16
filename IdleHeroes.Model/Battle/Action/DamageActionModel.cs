@@ -6,9 +6,9 @@
 
         public double Damage { get; private set; }
 
-        public override void UseAction()
+        public override void UseAction(ITarget target)
         {
-            //TODO
+            target.TakeDamage(Damage);
         }
 
         public class Builder : IActionBuilder

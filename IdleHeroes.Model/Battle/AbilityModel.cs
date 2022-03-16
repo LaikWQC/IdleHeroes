@@ -7,21 +7,26 @@ namespace IdleHeroes.Model
     {
         void AddAction(ActionModel action);
         AbilityModel Product { get; }
+        void Finish();
     }
 
     public class AbilityModel
     {
-        private AbilityModel() 
-        {
-            Actions = new ReadOnlyCollection<ActionModel>(_actions);
-        }
+        private AbilityModel() { }
 
         public int CooldownMulti { get; private set; }
-        private List<ActionModel> _actions = new List<ActionModel>();
-        public IReadOnlyCollection<ActionModel> Actions { get; }
+        private List<ActionModel> _actions;
+        public void UseAbility(IBattleContext context)
+        {
+            foreach(var action in _actions)
+            {
+                action.UseAction(context.Enemy); //TODO target by type
+            }
+        }
 
         public class Builder : IAbilityBuilder
         {
+            private List<ActionModel> _actions = new List<ActionModel>();
             public Builder(int cooldownMulti)
             {
                 Product = new AbilityModel();
@@ -30,10 +35,15 @@ namespace IdleHeroes.Model
 
             public void AddAction(ActionModel action)
             {
-                Product._actions.Add(action);
+                _actions.Add(action);
             }
 
             public AbilityModel Product { get; }
+
+            public void Finish()
+            {
+                Product._actions = _actions; //TODO Order
+            }
         }
     }
 }

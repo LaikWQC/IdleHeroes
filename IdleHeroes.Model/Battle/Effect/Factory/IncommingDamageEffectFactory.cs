@@ -8,7 +8,7 @@ namespace IdleHeroes.Model
 
         public int Value { get; private set; }
 
-        public override void ApplyEffect()
+        public override void ApplyEffect(ITarget target)
         {
             //TODO
         }

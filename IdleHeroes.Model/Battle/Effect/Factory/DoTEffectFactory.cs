@@ -8,7 +8,7 @@ namespace IdleHeroes.Model
 
         public int Potency { get; private set; }
 
-        public override void ApplyEffect()
+        public override void ApplyEffect(ITarget target)
         {
             //TODO
         }
