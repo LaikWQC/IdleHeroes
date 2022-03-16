@@ -12,9 +12,14 @@ namespace IdleHeroes.Model
 
     public class AbilityModel
     {
-        private AbilityModel() { }
+        private AbilityModel(string name)
+        {
+            Name = name;
+        }
 
         public int CooldownMulti { get; private set; }
+        public string Name { get; }
+
         private List<ActionModel> _actions;
         public void UseAbility(IBattleContext context)
         {
@@ -27,9 +32,9 @@ namespace IdleHeroes.Model
         public class Builder : IAbilityBuilder
         {
             private List<ActionModel> _actions = new List<ActionModel>();
-            public Builder(int cooldownMulti)
+            public Builder(string name, int cooldownMulti)
             {
-                Product = new AbilityModel();
+                Product = new AbilityModel(name);
                 Product.CooldownMulti = cooldownMulti;
             }
 

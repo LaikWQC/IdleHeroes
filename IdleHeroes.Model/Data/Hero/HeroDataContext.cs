@@ -20,7 +20,7 @@ namespace IdleHeroes.Model
                 var id = dto.Id;
                 if (context.Abiities.ContainsKey(id))
                     error.RepeatedAbilityIdError(id);
-                else context.Abiities.Add(id, new AbilityData(id, dto.CooldownMulti));
+                else context.Abiities.Add(id, new AbilityData(dto.Name, id, dto.CooldownMulti));
             }
 
             var actionBuilder = new ActionDataBuilder(error);

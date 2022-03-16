@@ -8,7 +8,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Border Background="DarkSlateGray" MinHeight="80" CornerRadius="10">
-        <ContentPresenter Content="{Binding RoomContext.Value}">
+        <ContentPresenter Content="{Binding RoomContext.Value}" Margin="5">
             <ContentPresenter.Resources>
                 <DataTemplate DataType="{x:Type models:BattleIdleRoomContext}">
                     <Grid>
@@ -17,27 +17,104 @@
                             <ColumnDefinition Width="5"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Grid Grid.Column="2">
+                        <Grid Grid.Column="0">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="auto"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Text="{Binding HeroJob.Name}" HorizontalAlignment="Center" Foreground="FloralWhite"/>
+                            <TextBlock Grid.Row="0" Text="{Binding HeroJob.Experience, StringFormat={}{0} exp}" HorizontalAlignment="Right" Margin="0 0 20 0" Foreground="FloralWhite"/>
+                            <Button Grid.Row="1" Content="Stats"/>
+                        </Grid>
+                        <Grid Grid.Column="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <ComboBox Grid.Row="0" SelectedIndex="0">
+                                <ComboBoxItem Content="1st location"/>
+                            </ComboBox>
                             <Button Grid.Row="1" Content="Move to location" Command="{Binding CmdMoveToLocation}"/>
                         </Grid>
                     </Grid>                    
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type models:BattleCombatRoomContext}">
                     <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="40"/>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="5"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Content="&lt;-" Command="{Binding CmdMoveBack}"/>
-                        <ContentControl Grid.Column="1" Content="{Binding Hero}"/>
-                        <ContentControl Grid.Column="3" Content="{Binding Enemy}"/>
-                    </Grid>                    
+                        <TextBlock Grid.Row="0" Grid.ColumnSpan="3" Text="{Binding State.Value}" Foreground="FloralWhite" HorizontalAlignment="Center"/>
+                        <Button Grid.Column="0" Grid.RowSpan="2" Content="Run" Command="{Binding CmdMoveBack}"/>
+                        <Border Grid.Row="1" Grid.Column="1" Background="DimGray" CornerRadius="5" Margin="5" DataContext="{Binding Hero}">
+                            <Grid Margin="5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" Text="{Binding Name}" Foreground="FloralWhite" HorizontalAlignment="Center"/>
+                                <ProgressBar Grid.Row="1" Height="10" Foreground="Red" Value="70"/>
+                                <ItemsControl Name="AbilitiesControl" Grid.Row="2" Margin="5" ItemsSource="{Binding AbilitiesContainer.Abilities}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="2*"/>
+                                                    <ColumnDefinition Width="auto"/>
+                                                    <ColumnDefinition Width="3*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <ProgressBar Grid.Column="0" Height="5" BorderBrush="Transparent" Background="Transparent" 
+                                                             Maximum="{Binding DataContext.AbilitiesContainer.Maximum, ElementName=AbilitiesControl}" Value="{Binding Percentage}"/>
+                                                <TextBlock Grid.Column="1" Text="{Binding Percentage, StringFormat={}{0}%}" Margin="5 0" Foreground="FloralWhite"/>
+                                                <TextBlock Grid.Column="2" Text="{Binding Name}" Foreground="FloralWhite"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                                <ProgressBar Grid.Row="3" Height="10" Foreground="Blue" Value="50"/>
+                                <TextBlock Grid.Row="4" Text="{Binding CurrentAbility.Value.Name}" Foreground="FloralWhite" HorizontalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="2" Background="DimGray" CornerRadius="5" Margin="5" DataContext="{Binding Enemy}">
+                            <Grid Margin="5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" Text="Enemy name" Foreground="FloralWhite" HorizontalAlignment="Center"/>
+                                <ProgressBar Grid.Row="1" Height="10" Foreground="Red" Value="70"/>
+                                <ItemsControl Grid.Row="2" Margin="5" ItemsSource="{Binding AbilitiesContainer.Abilities}">                                    
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="2*"/>
+                                                    <ColumnDefinition Width="auto"/>
+                                                    <ColumnDefinition Width="3*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <ProgressBar Grid.Column="0" Height="5" BorderBrush="Transparent" Background="Transparent" Value="{Binding Percentage}"/>
+                                                <TextBlock Grid.Column="1" Text="{Binding Percentage, StringFormat={}{0}%}" Margin="5 0" Foreground="FloralWhite"/>
+                                                <TextBlock Grid.Column="2" Text="{Binding Name}" Foreground="FloralWhite"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                                <ProgressBar Grid.Row="3" Height="10" Foreground="Blue" Value="50"/>
+                                <TextBlock Grid.Row="4" Text="Bite" Foreground="FloralWhite" HorizontalAlignment="Center"/>
+                            </Grid>
+                        </Border>                        
+                    </Grid>                                 
                 </DataTemplate>
             </ContentPresenter.Resources>
         </ContentPresenter>

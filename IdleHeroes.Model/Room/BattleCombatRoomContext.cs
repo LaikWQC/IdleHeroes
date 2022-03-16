@@ -1,4 +1,5 @@
-﻿using LaikWQC.Utils.Commands;
+﻿using IdleHeroes.Model.Services;
+using LaikWQC.Utils.Commands;
 using System;
 using System.Windows.Input;
 
@@ -10,6 +11,9 @@ namespace IdleHeroes.Model
 
         public BattleCombatRoomContext(IBattleRoom owner)
         {
+            State = PropertyService.Instance.CreateProperty(BattleContextStates.Idle);
+            State.ValueChanged += OnStateChanged;
+
             CmdMoveBack = new MyCommand(MoveBack);
             _owner = owner;
             _heroContext = new HeroBattleContext(this);
@@ -19,7 +23,8 @@ namespace IdleHeroes.Model
 
         public void Dispose()
         {
-            //TODO
+            Hero.Dispose();
+            //Enemy?.Dispose();
         }
 
         private void MoveBack()
@@ -30,26 +35,17 @@ namespace IdleHeroes.Model
 
         public HeroAvatar Hero { get; }
         public ITarget Enemy { get; set; }
-        private BattleContextStates State
+        public IProperty<BattleContextStates> State { get; }
+        private void OnStateChanged()
         {
-            get => _state;
-            set
+            switch (State.Value)
             {
-                if (_state == value) return;
-                _state = value;
-                StateChanged?.Invoke();
-
-                switch(_state)
-                {
-                    case BattleContextStates.Hunting:
-                        Enemy = new Dummy(); //TODO
-                        State = BattleContextStates.Battle;
-                        break;
-                }
+                case BattleContextStates.Hunting:
+                    Enemy = new Dummy(); //TODO
+                    State.Value = BattleContextStates.Battle;
+                    break;
             }
         }
-        private BattleContextStates _state;
-        private event Action StateChanged;
 
         private HeroBattleContext _heroContext;
         private class HeroBattleContext : IHeroBattleContext
@@ -65,13 +61,13 @@ namespace IdleHeroes.Model
             public ITarget Enemy => _owner.Enemy;
             public BattleContextStates State 
             {
-                get => _owner.State;
-                set => _owner.State = value;
+                get => _owner.State.Value;
+                set => _owner.State.Value = value;
             }
             public event Action StateChanged
             {
-                add => _owner.StateChanged += value;
-                remove => _owner.StateChanged -= value;
+                add => _owner.State.ValueChanged += value;
+                remove => _owner.State.ValueChanged -= value;
             }
         }
         private class Dummy : ITarget

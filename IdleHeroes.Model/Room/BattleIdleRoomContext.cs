@@ -13,6 +13,8 @@ namespace IdleHeroes.Model
             _owner = owner;
         }
 
+        public JobModel HeroJob => _owner.Hero.CurrentJob;
+
         public void Dispose() { }
 
         private void MoveToLocation()

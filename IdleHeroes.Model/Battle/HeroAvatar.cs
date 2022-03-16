@@ -7,16 +7,16 @@ namespace IdleHeroes.Model
 {
     public class HeroAvatar : ITarget
     {
-        private readonly AbilitiesContainer _container;
         private IHeroBattleContext _context;
 
-        public HeroAvatar(AbilitiesContainer container, IHeroBattleContext context)
+        public HeroAvatar(string name, AbilitiesContainer container, IHeroBattleContext context)
         {
             CurrentHp = PropertyService.Instance.CreateProperty(100D);
             CurrentAbility = PropertyService.Instance.CreateProperty<AbilityModel>();
             CurrentCooldown = PropertyService.Instance.CreateProperty<double>();
 
-            _container = container;
+            Name = name;
+            AbilitiesContainer = container;
             _context = context;
 
             OnUpdate = DoNothing;
@@ -24,9 +24,11 @@ namespace IdleHeroes.Model
             _context.State = BattleContextStates.Hunting;
         }
 
-        public IProperty<double> CurrentHp { get; }
+        public string Name { get; }
+        public AbilitiesContainer AbilitiesContainer { get; }
         public IProperty<AbilityModel> CurrentAbility { get; }
         public IProperty<double> CurrentCooldown { get; }
+        public IProperty<double> CurrentHp { get; }
         public event Action Died;
 
         public void TakeDamage(double damage)
@@ -72,7 +74,7 @@ namespace IdleHeroes.Model
         }
         private void ChooseAbility()
         {
-            CurrentAbility.Value = _container.GetAbility();
+            CurrentAbility.Value = AbilitiesContainer.GetAbility();
             CurrentCooldown.Value = _attackCooldown * CurrentAbility.Value.CooldownMulti / 100;
         }
 

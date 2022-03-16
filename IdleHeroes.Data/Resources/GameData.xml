@@ -2,37 +2,32 @@
 	<Jobs>
 		<Job Name="Archer" Tags="ARC,RNG,ALL">
 			<Perks>
-				<Perk Id="AimS_arc" Price="0" Info="Add raw AimedShot - self">
+				<Perk Id="Shot" Price="0" Info="Default: add ArrowShot - self (ability and action)">
+					<Ability AbilityId="Shot" Tags="ARC"/>
+					<Shared Id="Ac_Shot" Tags="ARC"/>
+					<Link AbilityId="Shot" ActionId="Shot" Tags="ARC"/>
+				</Perk>
+				<Perk Id="AimS_arc" Price="0" Info="Add AimedShot - self">
 					<Shared Id="Ab_AimS" Tags="ARC"/>
-					<Shared Id="Ac_AimS" Tags="ARC"/>
 					<Shared Id="L_AimS" Tags="ARC"/>
-				</Perk>
-				<Perk Id="HevS" Price="50" Info="Add HeavyShot - self">
-					<Ability AbilityId="HevS" Tags="ARC"/>
-					<Action ActionId="HevS" Tags="ARC"/>
-					<Link AbilityId="HevS" ActionId="HevS" Tags="ARC"/>
-				</Perk>
-				<Perk Id="AimS_Eff" Price="100" Info="Add Aimed effect to AimedShot - self">
 					<Shared Id="Ac_AimedE" Tags="ARC"/>
 					<Shared Id="L_AimedE" Tags="ARC"/>
 				</Perk>
-				<Perk Id="PoiS" Price="150" Info="Add PoisonShot - self">
+				<Perk Id="PoiS" Price="0" Info="Add PoisonShot - self">
 					<Ability AbilityId="PoiS" Tags="ARC"/>
-					<Action ActionId="PoiS" Tags="ARC"/>
-					<Link AbilityId="PoiS" ActionId="PoiS" Tags="ARC"/>
+					<Link AbilityId="PoiS" ActionId="Shot" Tags="ARC"/>
 					<Action ActionId="PoisonE" Tags="ARC"/>
 					<Link AbilityId="PoiS" ActionId="PoisonE" Tags="ARC"/>
 				</Perk>
-				<Perk Id="HuntM" Price="350" Info="Add HuntersMark - self">
+				<Perk Id="HuntM" Price="0" Info="Add HuntersMark - self">
 					<Ability AbilityId="HuntM" Tags="ARC"/>
-					<Action ActionId="HuntM" Tags="ARC"/>
-					<Link AbilityId="HuntM" ActionId="HuntM" Tags="ARC"/>
+					<Link AbilityId="HuntM" ActionId="Shot" Tags="ARC"/>
 					<Action ActionId="HMarkE" Tags="ARC"/>
 					<Link AbilityId="HuntM" ActionId="HMarkE" Tags="ARC"/>
 				</Perk>
-				<Perk Id="AimS_rng" Price="1000" Info="Add AimedShot - all ranged">
+				<Perk Id="AimS_rng" Price="0" Info="Add AimedShot - all ranged">
 					<Shared Id="Ab_AimS" Tags="RNG"/>
-					<Shared Id="Ac_AimS" Tags="RNG"/>
+					<Shared Id="Ac_Shot" Tags="RNG"/>
 					<Shared Id="L_AimS" Tags="RNG"/>
 					<Shared Id="Ac_AimedE" Tags="RNG"/>
 					<Shared Id="L_AimedE" Tags="RNG"/>
@@ -40,24 +35,21 @@
 			</Perks>
 			<SharedPerks>
 				<Ability SharedId="Ab_AimS" AbilityId="AimS"/>
-				<Action SharedId="Ac_AimS" ActionId="AimS"/>
-				<Link SharedId="L_AimS" AbilityId="AimS" ActionId="AimS"/>
 				<Action SharedId="Ac_AimedE" ActionId="AimedE"/>
+				<Action SharedId="Ac_Shot" ActionId="Shot"/>
+				<Link SharedId="L_AimS" AbilityId="AimS" ActionId="Shot"/>
 				<Link SharedId="L_AimedE" AbilityId="AimS" ActionId="AimedE"/>
 			</SharedPerks>
 		</Job>
 	</Jobs>
 	<Abilities>
-		<Ability Id="HevS" Name="HeavyShot" Cd="100"/>
-		<Ability Id="AimS" Name="AimedShot" Cd="100"/>
-		<Ability Id="PoiS" Name="PoisonShot" Cd="100"/>
-		<Ability Id="HuntM" Name="HuntersMark" Cd="100"/>
+		<Ability Id="Shot" Name="Arrow shot" Cd="100"/>
+		<Ability Id="AimS" Name="Aimed shot" Cd="100"/>
+		<Ability Id="PoiS" Name="Poison shot" Cd="100"/>
+		<Ability Id="HuntM" Name="Hunter's mark" Cd="100"/>
 	</Abilities>
 	<Actions>
-		<Damage Id="HevS" Potency="120"/>
-		<Damage Id="AimS" Potency="90"/>
-		<Damage Id="PoiS" Potency="90"/>
-		<Damage Id="HuntM" Potency="70"/>
+		<Damage Id="Shot" Potency="100"/>
 		<Effect Id="AimedE" EffectId="Aimed"/>
 		<Effect Id="PoisonE" EffectId="Poison"/>
 		<Effect Id="HMarkE" EffectId="HMark"/>
