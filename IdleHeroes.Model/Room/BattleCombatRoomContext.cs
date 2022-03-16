@@ -1,6 +1,7 @@
 ﻿using IdleHeroes.Model.Services;
 using LaikWQC.Utils.Commands;
 using System;
+using System.Collections.Generic;
 using System.Windows.Input;
 
 namespace IdleHeroes.Model
@@ -11,20 +12,21 @@ namespace IdleHeroes.Model
 
         public BattleCombatRoomContext(IBattleRoom owner)
         {
+            Enemy = PropertyService.Instance.CreateProperty<Avatar>();
             State = PropertyService.Instance.CreateProperty(BattleContextStates.Idle);
             State.ValueChanged += OnStateChanged;
 
             CmdMoveBack = new MyCommand(MoveBack);
             _owner = owner;
-            _heroContext = new HeroBattleContext(this);
 
-            Hero = _owner.Hero.CreateAvatar(_heroContext);
+            Hero = _owner.Hero.CreateAvatar(new HeroBattleContext(this));
+            Hero.Died += ()=> _owner.EnterToIdle(); 
         }
 
         public void Dispose()
         {
             Hero.Dispose();
-            //Enemy?.Dispose();
+            Enemy.Value?.Dispose();
         }
 
         private void MoveBack()
@@ -34,20 +36,29 @@ namespace IdleHeroes.Model
         public ICommand CmdMoveBack { get; }
 
         public HeroAvatar Hero { get; }
-        public ITarget Enemy { get; set; }
+        public IProperty<Avatar> Enemy { get; }
         public IProperty<BattleContextStates> State { get; }
         private void OnStateChanged()
         {
             switch (State.Value)
             {
                 case BattleContextStates.Hunting:
-                    Enemy = new Dummy(); //TODO
-                    State.Value = BattleContextStates.Battle;
+                    CreateNewEnemy();
                     break;
             }
         }
 
-        private HeroBattleContext _heroContext;
+        private void CreateNewEnemy()
+        {
+            if(Enemy.Value!=null)
+                Enemy.Value.Died -= CreateNewEnemy;
+
+            Enemy.Value = new EnemyAvatar(new EnemyBattleContext(this)); //TODO
+            State.Value = BattleContextStates.Battle;
+
+            Enemy.Value.Died += CreateNewEnemy;
+        }
+
         private class HeroBattleContext : IHeroBattleContext
         {
             private readonly BattleCombatRoomContext _owner;
@@ -58,7 +69,7 @@ namespace IdleHeroes.Model
             }
 
             public ITarget Self => _owner.Hero;
-            public ITarget Enemy => _owner.Enemy;
+            public ITarget Enemy => _owner.Enemy.Value;
             public BattleContextStates State 
             {
                 get => _owner.State.Value;
@@ -70,10 +81,17 @@ namespace IdleHeroes.Model
                 remove => _owner.State.ValueChanged -= value;
             }
         }
-        private class Dummy : ITarget
+        private class EnemyBattleContext : IBattleContext
         {
-            public void ApplyEffect(EffectModel effect) { }
-            public void TakeDamage(double damage) { }
+            private readonly BattleCombatRoomContext _owner;
+
+            public EnemyBattleContext(BattleCombatRoomContext owner)
+            {
+                _owner = owner;
+            }
+
+            public ITarget Self => _owner.Enemy.Value;
+            public ITarget Enemy => _owner.Hero;
         }
     }
 }
