@@ -11,10 +11,33 @@
         <ContentPresenter Content="{Binding RoomContext.Value}">
             <ContentPresenter.Resources>
                 <DataTemplate DataType="{x:Type models:BattleIdleRoomContext}">
-                    <Button Content="Move to location" Command="{Binding CmdMoveToLocation}"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="5"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Button Grid.Row="1" Content="Move to location" Command="{Binding CmdMoveToLocation}"/>
+                        </Grid>
+                    </Grid>                    
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type models:BattleCombatRoomContext}">
-                    <Button Content="Move back" Command="{Binding CmdMoveBack}"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="40"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="5"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Content="&lt;-" Command="{Binding CmdMoveBack}"/>
+                        <ContentControl Grid.Column="1" Content="{Binding Hero}"/>
+                        <ContentControl Grid.Column="3" Content="{Binding Enemy}"/>
+                    </Grid>                    
                 </DataTemplate>
             </ContentPresenter.Resources>
         </ContentPresenter>
