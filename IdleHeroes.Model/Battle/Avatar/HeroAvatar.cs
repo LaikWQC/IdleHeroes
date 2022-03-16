@@ -11,9 +11,9 @@ namespace IdleHeroes.Model
 
         public HeroAvatar(string name, AbilitiesContainer container, IHeroBattleContext context)
         {
-            CurrentHp = PropertyService.Instance.CreateProperty(100D);
+            HP = new LimitedValue(100D);
             CurrentAbility = PropertyService.Instance.CreateProperty<AbilityModel>();
-            CurrentCooldown = PropertyService.Instance.CreateProperty<double>();
+            Cooldown = new LimitedValue();
 
             Name = name;
             AbilitiesContainer = container;
@@ -27,14 +27,14 @@ namespace IdleHeroes.Model
         public string Name { get; }
         public AbilitiesContainer AbilitiesContainer { get; }
         public IProperty<AbilityModel> CurrentAbility { get; }
-        public IProperty<double> CurrentCooldown { get; }
-        public IProperty<double> CurrentHp { get; }
+        public LimitedValue Cooldown { get; }
+        public LimitedValue HP { get; }
         public event Action Died;
 
         public void TakeDamage(double damage)
         {
-            CurrentHp.Value -= damage;
-            if (CurrentHp.Value <= 0)
+            HP.Current.Value -= damage;
+            if (HP.IsMined)
                 Die();
         }
         private void Die()
@@ -62,8 +62,7 @@ namespace IdleHeroes.Model
                     _context.State = BattleContextStates.Hunting;
                     break;
                 case BattleContextStates.Hunting:
-                    CurrentAbility.Value = null;
-                    CurrentCooldown.Value = 0;
+                    RemoveAbility();
                     OnUpdate = DoNothing;
                     break;
                 case BattleContextStates.Battle:
@@ -75,16 +74,22 @@ namespace IdleHeroes.Model
         private void ChooseAbility()
         {
             CurrentAbility.Value = AbilitiesContainer.GetAbility();
-            CurrentCooldown.Value = _attackCooldown * CurrentAbility.Value.CooldownMulti / 100;
+            Cooldown.Max.Value = CurrentAbility.Value.CooldownMulti / 100D;
+            Cooldown.Current.Value = 0;
+        }
+        private void RemoveAbility()
+        {
+            CurrentAbility.Value = null;
+            Cooldown.Max.Value = 0;
         }
 
         private void DoNothing(double deltaTime) { }
 
-        private double _attackCooldown = 2D;
+        private double _attackSpeed = 1 / 2D;
         private void Battle(double deltaTime)
         {
-            CurrentCooldown.Value -= deltaTime;
-            if (CurrentCooldown.Value > 0) return;
+            Cooldown.Current.Value += deltaTime * _attackSpeed;
+            if (!Cooldown.IsMaxed) return;
 
             CurrentAbility.Value.UseAbility(_context);
             ChooseAbility();
