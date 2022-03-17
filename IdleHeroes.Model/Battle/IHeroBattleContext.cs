@@ -8,10 +8,4 @@ namespace IdleHeroes.Model
 
         public event Action StateChanged;
     }
-    public enum BattleContextStates
-    {
-        Idle,
-        Hunting,
-        Battle
-    }
 }
