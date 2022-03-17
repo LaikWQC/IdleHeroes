@@ -7,7 +7,7 @@
             ChooseAbility();
         }
         private static int count = 1;
-        private static AvatarDto CreateDto() => new AvatarDto() { Name = $"Dummy_{count++}", AttackCooldown = 2.5, HP = 50 };
+        private static AvatarStats CreateDto() => new AvatarStats($"Dummy_{count++}", 2.5, 50);
         private static AbilitiesContainer CreateContainer()
         {
             var statistic = new HeroStatistic();

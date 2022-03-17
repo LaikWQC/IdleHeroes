@@ -12,8 +12,8 @@ namespace IdleHeroes.Model
                 perk.Apply(statistic);
             statistic.Finish();
             var container = new AbilitiesContainer(statistic.Abilities.Values.Select(x => x.Product));
-            var dto = new AvatarDto() { Name = hero.CurrentJob.Name, AttackCooldown = 2, HP = 100 }; //TODO
-            return new HeroAvatar(dto, container, context);
+            var stats = new HeroAvatarStats(hero.CurrentJob.Name, 2, 100, 5); //TODO
+            return new HeroAvatar(stats, container, context);
         }
     }
 }

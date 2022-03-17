@@ -8,7 +8,7 @@
 
         public override void UseAction(ITarget target)
         {
-            target.TakeDamage(Damage);
+            target.TakeDamage(MathEx.GetRandomNumber(1,Damage));
         }
 
         public class Builder : IActionBuilder

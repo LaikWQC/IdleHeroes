@@ -15,8 +15,8 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Text="{Binding Name}" Foreground="FloralWhite" HorizontalAlignment="Center"/>
-            <ProgressBar Grid.Row="1" Height="10" Foreground="Red" Maximum="{Binding HP.Max.Value}" Value="{Binding HP.Current.Value}"/>
+            <TextBlock Grid.Row="0" Text="{Binding Stats.Name}" Foreground="FloralWhite" HorizontalAlignment="Center"/>
+            <ProgressBar Grid.Row="1" Height="10" Foreground="Red" Maximum="{Binding Stats.HP.Max.Value}" Value="{Binding Stats.HP.Current.Value}"/>
             <ItemsControl Name="AbilitiesControl" Grid.Row="2" Margin="5" ItemsSource="{Binding AbilitiesContainer.Abilities}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>

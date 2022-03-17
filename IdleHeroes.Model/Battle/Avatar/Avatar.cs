@@ -9,29 +9,26 @@ namespace IdleHeroes.Model
         private IBattleContext _context;
         protected double _attackSpeed;
 
-        public Avatar(AvatarDto dto, AbilitiesContainer container, IBattleContext context)
+        public Avatar(AvatarStats stats, AbilitiesContainer container, IBattleContext context)
         {
-            HP = new LimitedValue(dto.HP);
             CurrentAbility = PropertyService.Instance.CreateProperty<AbilityModel>();
             Cooldown = new LimitedValue();
 
-            Name = dto.Name;
+            Stats = stats;
             AbilitiesContainer = container;
             _context = context;
-            _attackSpeed = 1 / dto.AttackCooldown;
         }
 
-        public string Name { get; }
+        public AvatarStats Stats { get; }
         public AbilitiesContainer AbilitiesContainer { get; }
         public IProperty<AbilityModel> CurrentAbility { get; }
         public LimitedValue Cooldown { get; }
-        public LimitedValue HP { get; }
         public event Action Died;
 
         public void TakeDamage(double damage)
         {
-            HP.Current.Value -= damage;
-            if (HP.IsMined)
+            Stats.HP.Current.Value -= damage;
+            if (Stats.HP.IsMined)
                 Die();
         }
         private void Die()
@@ -47,7 +44,7 @@ namespace IdleHeroes.Model
 
         protected override void Update(double deltaTime)
         {
-            Cooldown.Current.Value += deltaTime * _attackSpeed;
+            Cooldown.Current.Value += deltaTime * Stats.AttackSpeed;
             if (!Cooldown.IsMaxed) return;
 
             CurrentAbility.Value.UseAbility(_context);
