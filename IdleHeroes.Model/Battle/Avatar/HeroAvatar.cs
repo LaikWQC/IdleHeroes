@@ -40,5 +40,16 @@ namespace IdleHeroes.Model
                     break;
             }
         }
+
+        private void DoNothing(double deltaTime) { }
+        private void Battle(double deltaTime)
+        {
+            Cooldown.Current.Value += deltaTime * _attackSpeed;
+            if (!Cooldown.IsMaxed) return;
+
+            CurrentAbility.Value.UseAbility(_context);
+            if (_context.State != BattleContextStates.Battle) return;
+            ChooseAbility();
+        }
     }
 }

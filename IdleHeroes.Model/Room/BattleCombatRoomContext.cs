@@ -1,4 +1,5 @@
 ﻿using IdleHeroes.Model.Services;
+using IdleHeroes.Model.Time;
 using LaikWQC.Utils.Commands;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Windows.Input;
 
 namespace IdleHeroes.Model
 {
-    public class BattleCombatRoomContext : IRoomContext
+    public class BattleCombatRoomContext : TimeObject, IRoomContext
     {
         private readonly IBattleRoom _owner;
 
@@ -14,18 +15,20 @@ namespace IdleHeroes.Model
         {
             Enemy = PropertyService.Instance.CreateProperty<Avatar>();
             State = PropertyService.Instance.CreateProperty(BattleContextStates.Idle);
+            OnUpdate = DoNothing;
             State.ValueChanged += OnStateChanged;
             _enemyBattleContext = new EnemyBattleContext(this);
-
             CmdMoveBack = new MyCommand(MoveBack);
+            
             _owner = owner;
 
             Hero = _owner.Hero.CreateAvatar(new HeroBattleContext(this));
-            Hero.Died += ()=> _owner.EnterToIdle(); 
+            Hero.Died += ()=> _owner.EnterToIdle();
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
+            base.Dispose();
             Hero.Dispose();
             Enemy.Value?.Dispose();
         }
@@ -44,20 +47,47 @@ namespace IdleHeroes.Model
             switch (State.Value)
             {
                 case BattleContextStates.Hunting:
-                    CreateNewEnemy();
+                    _timeToSpawn = 1; //TODO
+                    OnUpdate = Spawn;
+                    break;
+                default: 
+                    OnUpdate = DoNothing;
                     break;
             }
         }
 
+        protected override void Update(double deltaTime)
+        {
+            OnUpdate?.Invoke(deltaTime);
+        }
+        protected Action<double> OnUpdate;
+
+        private double _timeToSpawn;
+        protected void Spawn(double deltaTime)
+        {
+            _timeToSpawn -= deltaTime;
+            if (_timeToSpawn > 0) return;
+            CreateNewEnemy();
+            State.Value = BattleContextStates.Battle;
+        }
+
+        protected void DoNothing(double deltaTime) { }
+
         private void CreateNewEnemy()
         {
             if(Enemy.Value!=null)
-                Enemy.Value.Died -= CreateNewEnemy;
+            {
+                Enemy.Value.Dispose();
+                Enemy.Value.Died -= OnEnemyDied;
+            }                
 
             Enemy.Value = new EnemyAvatar(_enemyBattleContext); //TODO
-            State.Value = BattleContextStates.Battle;
-
-            Enemy.Value.Died += CreateNewEnemy;
+            Enemy.Value.Died += OnEnemyDied;
+        }
+        private void OnEnemyDied()
+        {
+            Enemy.Value = null;
+            State.Value = BattleContextStates.Idle;
         }
 
         private EnemyBattleContext _enemyBattleContext;

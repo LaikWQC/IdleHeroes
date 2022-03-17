@@ -7,6 +7,7 @@ namespace IdleHeroes.Model
     public abstract class Avatar : TimeObject, ITarget
     {
         private IBattleContext _context;
+        protected double _attackSpeed;
 
         public Avatar(AvatarDto dto, AbilitiesContainer container, IBattleContext context)
         {
@@ -46,7 +47,11 @@ namespace IdleHeroes.Model
 
         protected override void Update(double deltaTime)
         {
-            Battle(deltaTime);
+            Cooldown.Current.Value += deltaTime * _attackSpeed;
+            if (!Cooldown.IsMaxed) return;
+
+            CurrentAbility.Value.UseAbility(_context);
+            ChooseAbility();
         }
 
         protected void ChooseAbility()
@@ -60,17 +65,5 @@ namespace IdleHeroes.Model
             CurrentAbility.Value = null;
             Cooldown.Max.Value = 0;
         }
-
-        private double _attackSpeed;
-        protected void Battle(double deltaTime)
-        {
-            Cooldown.Current.Value += deltaTime * _attackSpeed;
-            if (!Cooldown.IsMaxed) return;
-
-            CurrentAbility.Value.UseAbility(_context);
-            ChooseAbility();
-        }
-
-        protected void DoNothing(double deltaTime) { }
     }
 }
