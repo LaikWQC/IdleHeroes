@@ -1,5 +1,4 @@
-﻿using IdleHeroes.Model.Services;
-using IdleHeroes.Model.Time;
+﻿using IdleHeroes.Model.Time;
 using System;
 
 namespace IdleHeroes.Model
@@ -11,8 +10,7 @@ namespace IdleHeroes.Model
 
         public Avatar(AvatarStats stats, AbilitiesContainer container, IBattleContext context)
         {
-            CurrentAbility = PropertyService.Instance.CreateProperty<AbilityModel>();
-            Cooldown = new LimitedValue();
+            CurrentAbility = new ActiveAbility();
 
             Stats = stats;
             AbilitiesContainer = container;
@@ -21,8 +19,8 @@ namespace IdleHeroes.Model
 
         public AvatarStats Stats { get; }
         public AbilitiesContainer AbilitiesContainer { get; }
-        public IProperty<AbilityModel> CurrentAbility { get; }
-        public LimitedValue Cooldown { get; }
+        public ActiveAbility CurrentAbility { get; }
+
         public event Action Died;
 
         public void TakeDamage(double damage)
@@ -44,23 +42,20 @@ namespace IdleHeroes.Model
 
         protected override void Update(double deltaTime)
         {
-            Cooldown.Current.Value += deltaTime * Stats.AttackSpeed;
-            if (!Cooldown.IsMaxed) return;
+            CurrentAbility.Cooldown.Current.Value += deltaTime * Stats.AttackSpeed;
+            if (!CurrentAbility.Cooldown.IsMaxed) return;
 
-            CurrentAbility.Value.UseAbility(_context);
+            CurrentAbility.Ability.Value.UseAbility(_context);
             ChooseAbility();
         }
 
         protected void ChooseAbility()
         {
-            CurrentAbility.Value = AbilitiesContainer.GetAbility();
-            Cooldown.Max.Value = CurrentAbility.Value.CooldownMulti / 100D;
-            Cooldown.Current.Value = 0;
+            CurrentAbility.SetAbility(AbilitiesContainer.GetAbility());
         }        
         protected void RemoveAbility()
         {
-            CurrentAbility.Value = null;
-            Cooldown.Max.Value = 0;
+            CurrentAbility.SetAbility(null);
         }
     }
 }

@@ -46,10 +46,11 @@ namespace IdleHeroes.Model
         }
         private void Battle(double deltaTime)
         {
-            Cooldown.Current.Value += deltaTime * Stats.AttackSpeed;
-            if (!Cooldown.IsMaxed) return;
+            //TODO дублирование кода, но с проверкой на State 
+            CurrentAbility.Cooldown.Current.Value += deltaTime * Stats.AttackSpeed;
+            if (!CurrentAbility.Cooldown.IsMaxed) return;
 
-            CurrentAbility.Value.UseAbility(_context);
+            CurrentAbility.Ability.Value.UseAbility(_context);
             if (_context.State != BattleContextStates.Battle) return;
             ChooseAbility();
         }

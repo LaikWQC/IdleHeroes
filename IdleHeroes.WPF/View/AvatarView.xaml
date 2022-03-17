@@ -34,8 +34,8 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-            <ProgressBar Grid.Row="3" Height="10" Foreground="Blue" Maximum="{Binding Cooldown.Max.Value}" Value="{Binding Cooldown.Current.Value}"/>
-            <TextBlock Grid.Row="4" Text="{Binding CurrentAbility.Value.Name}" Foreground="FloralWhite" HorizontalAlignment="Center"/>            
+            <ProgressBar Grid.Row="3" Height="10" Foreground="Blue" Maximum="{Binding CurrentAbility.Cooldown.Max.Value}" Value="{Binding CurrentAbility.Cooldown.Current.Value}"/>
+            <TextBlock Grid.Row="4" Text="{Binding CurrentAbility.Ability.Value.Name}" Foreground="FloralWhite" HorizontalAlignment="Center"/>            
         </Grid>
     </Border>
 </UserControl>
