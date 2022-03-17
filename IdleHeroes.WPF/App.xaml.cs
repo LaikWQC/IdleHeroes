@@ -1,6 +1,7 @@
 ﻿using IdleHeroes.Data;
 using IdleHeroes.Model;
 using IdleHeroes.Model.Services;
+using IdleHeroes.Model.Time;
 using IdleHeroes.WPF.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -23,10 +24,13 @@ namespace IdleHeroes.WPF
             base.OnStartup(e);
 
             PropertyService.Instance.Initialize(new MvvmPropertyFactory());
+            TimeService.Instance.Initialize(new Time(60));
 
             HeroDataLoader.LoadData(new DataErrorBase());
 
             new MainWindow() { DataContext = new MainViewModel() }.Show();
+
+            TimeService.Instance.Start();
         }
     }
 }

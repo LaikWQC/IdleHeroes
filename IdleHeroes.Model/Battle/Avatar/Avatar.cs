@@ -1,11 +1,10 @@
 ﻿using IdleHeroes.Model.Services;
-using LaikWQC.Utils.Commands;
+using IdleHeroes.Model.Time;
 using System;
-using System.Windows.Input;
 
 namespace IdleHeroes.Model
 {
-    public abstract class Avatar : ITarget
+    public abstract class Avatar : TimeObject, ITarget
     {
         private IBattleContext _context;
 
@@ -19,8 +18,6 @@ namespace IdleHeroes.Model
             AbilitiesContainer = container;
             _context = context;
             _attackSpeed = 1 / dto.AttackCooldown;
-
-            CmdUpdate = new MyCommand(() => Update(0.2));
         }
 
         public string Name { get; }
@@ -47,7 +44,7 @@ namespace IdleHeroes.Model
             //TODO
         }
 
-        public virtual void Update(double deltaTime)
+        protected override void Update(double deltaTime)
         {
             Battle(deltaTime);
         }
@@ -75,12 +72,5 @@ namespace IdleHeroes.Model
         }
 
         protected void DoNothing(double deltaTime) { }
-
-        public void Dispose()
-        {
-            //TODO
-        }
-
-        public ICommand CmdUpdate { get; }
     }
 }

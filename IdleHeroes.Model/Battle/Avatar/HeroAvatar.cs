@@ -17,9 +17,9 @@ namespace IdleHeroes.Model
             _context.State = BattleContextStates.Hunting;
         }
 
-        public override void Update(double deltaTime) 
+        protected override void Update(double deltaTime) 
         {
-            OnUpdate(deltaTime);
+            OnUpdate?.Invoke(deltaTime);
         }
         protected Action<double> OnUpdate;
 

@@ -15,6 +15,7 @@ namespace IdleHeroes.Model
             Enemy = PropertyService.Instance.CreateProperty<Avatar>();
             State = PropertyService.Instance.CreateProperty(BattleContextStates.Idle);
             State.ValueChanged += OnStateChanged;
+            _enemyBattleContext = new EnemyBattleContext(this);
 
             CmdMoveBack = new MyCommand(MoveBack);
             _owner = owner;
@@ -53,12 +54,13 @@ namespace IdleHeroes.Model
             if(Enemy.Value!=null)
                 Enemy.Value.Died -= CreateNewEnemy;
 
-            Enemy.Value = new EnemyAvatar(new EnemyBattleContext(this)); //TODO
+            Enemy.Value = new EnemyAvatar(_enemyBattleContext); //TODO
             State.Value = BattleContextStates.Battle;
 
             Enemy.Value.Died += CreateNewEnemy;
         }
 
+        private EnemyBattleContext _enemyBattleContext;
         private class HeroBattleContext : IHeroBattleContext
         {
             private readonly BattleCombatRoomContext _owner;

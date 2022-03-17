@@ -14,7 +14,6 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" Text="{Binding Name}" Foreground="FloralWhite" HorizontalAlignment="Center"/>
             <ProgressBar Grid.Row="1" Height="10" Foreground="Red" Maximum="{Binding HP.Max.Value}" Value="{Binding HP.Current.Value}"/>
@@ -36,8 +35,7 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
             <ProgressBar Grid.Row="3" Height="10" Foreground="Blue" Maximum="{Binding Cooldown.Max.Value}" Value="{Binding Cooldown.Current.Value}"/>
-            <TextBlock Grid.Row="4" Text="{Binding CurrentAbility.Value.Name}" Foreground="FloralWhite" HorizontalAlignment="Center"/>
-            <RepeatButton Grid.Row="5" Content="Update 0.2 sec" Command="{Binding CmdUpdate}"/>
+            <TextBlock Grid.Row="4" Text="{Binding CurrentAbility.Value.Name}" Foreground="FloralWhite" HorizontalAlignment="Center"/>            
         </Grid>
     </Border>
 </UserControl>
