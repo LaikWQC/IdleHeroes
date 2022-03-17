@@ -44,9 +44,9 @@
 	</Jobs>
 	<Abilities>
 		<Ability Id="Shot" Name="Arrow shot" Cd="100"/>
-		<Ability Id="AimS" Name="Aimed shot" Cd="100"/>
-		<Ability Id="PoiS" Name="Poison shot" Cd="100"/>
-		<Ability Id="HuntM" Name="Hunter's mark" Cd="100"/>
+		<Ability Id="AimS" Name="Aimed shot" Cd="100" Chance="15"/>
+		<Ability Id="PoiS" Name="Poison shot" Cd="100" Chance="25"/>
+		<Ability Id="HuntM" Name="Hunter's mark" Cd="100" Chance="15"/>
 	</Abilities>
 	<Actions>
 		<Damage Id="Shot" Potency="100"/>

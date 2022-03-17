@@ -13,7 +13,7 @@
             var statistic = new HeroStatistic();
             statistic.Power = 5;
 
-            var ability = new AbilityModel.Builder("Scare", 100);
+            var ability = new AbilityModel.Builder("Scare", 100, 80);
             var action = new DamageActionModel.Builder(100);
             ability.AddAction(action.Product);
             ability.Finish();

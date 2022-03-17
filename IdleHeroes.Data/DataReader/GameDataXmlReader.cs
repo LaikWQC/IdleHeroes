@@ -51,7 +51,7 @@ namespace IdleHeroes.Data
                     var perkPoint = new PerkPointDto()
                     {
                         Id = xPerkPoint.ParseId(),
-                        Price = xPerkPoint.ParseToInt("Price")
+                        Price = xPerkPoint.ParseToIntOrDefault("Price")
                     };
                     job.PerkPoints.Add(perkPoint);
 
@@ -67,7 +67,8 @@ namespace IdleHeroes.Data
                 {
                     Id = xAbility.ParseId(),
                     Name = xAbility.ParseName(),
-                    CooldownMulti = xAbility.ParseToInt("Cd")
+                    CooldownMulti = xAbility.ParseToIntOrDefault("Cd"),
+                    Chance = xAbility.ParseToInt("Chance")
                 });
             }
 
@@ -80,7 +81,7 @@ namespace IdleHeroes.Data
                         Product.Actions.Add(new DamageActionDto()
                         {
                             Id = xAction.ParseId(),
-                            Potency = xAction.ParseToInt("Potency")
+                            Potency = xAction.ParseToIntOrDefault("Potency")
                         });
                         break;
                     case "Effect":
@@ -106,8 +107,8 @@ namespace IdleHeroes.Data
                         {
                             Id = xEffect.ParseId(),
                             TargetType = xEffect.ParseToEffectTargetType(),
-                            Duration = xEffect.ParseToInt("Duration"),
-                            Value = xEffect.ParseToInt("Value")
+                            Duration = xEffect.ParseToIntOrDefault("Duration"),
+                            Value = xEffect.ParseToIntOrDefault("Value")
                         });
                         break;
                     case "DoT":
@@ -115,8 +116,8 @@ namespace IdleHeroes.Data
                         {
                             Id = xEffect.ParseId(),
                             TargetType = xEffect.ParseToEffectTargetType(),
-                            Duration = xEffect.ParseToInt("Duration"),
-                            Potency = xEffect.ParseToInt("Potency")
+                            Duration = xEffect.ParseToIntOrDefault("Duration"),
+                            Potency = xEffect.ParseToIntOrDefault("Potency")
                         });
                         break;
                     case "IncomingDamage":
@@ -124,8 +125,8 @@ namespace IdleHeroes.Data
                         {
                             Id = xEffect.ParseId(),
                             TargetType = xEffect.ParseToEffectTargetType(),
-                            Duration = xEffect.ParseToInt("Duration"),
-                            Value = xEffect.ParseToInt("Value")
+                            Duration = xEffect.ParseToIntOrDefault("Duration"),
+                            Value = xEffect.ParseToIntOrDefault("Value")
                         });
                         break;
                     default:
@@ -215,9 +216,13 @@ namespace IdleHeroes.Data
             return attribute.Value.ToString().Split(",", StringSplitOptions.RemoveEmptyEntries);
         }
 
-        public static int ParseToInt(this XElement element, string attribute)
+        public static int ParseToIntOrDefault(this XElement element, string attribute)
         {
-            return element.Attribute(attribute).ParseToInt();
+            return element.ParseToInt(attribute) ?? 0;
+        }
+        public static int? ParseToInt(this XElement element, string attribute)
+        {
+            return element.Attribute(attribute)?.ParseToInt();
         }
         public static int ParseToInt(this XAttribute attribute)
         {
