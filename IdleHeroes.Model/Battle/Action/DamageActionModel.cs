@@ -24,7 +24,7 @@
             public ActionModel Product => _product;
             private DamageActionModel _product;
 
-            public void Finish(HeroStatistic statistic)
+            public void Finish(HeroAvatarBuilder statistic)
             {
                 _product.Damage = statistic.Power * _potency / 100D;
             }

@@ -9,6 +9,6 @@
             _id = id;
         }
 
-        public abstract void CreateAction(HeroStatistic statistic);
+        public abstract void CreateAction(HeroAvatarBuilder statistic);
     }
 }

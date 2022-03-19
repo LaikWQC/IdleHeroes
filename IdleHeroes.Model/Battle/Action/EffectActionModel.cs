@@ -24,7 +24,7 @@
             public ActionModel Product => _product;
             private EffectActionModel _product;
 
-            public void Finish(HeroStatistic statistic) { }
+            public void Finish(HeroAvatarBuilder statistic) { }
         }
     }
 }

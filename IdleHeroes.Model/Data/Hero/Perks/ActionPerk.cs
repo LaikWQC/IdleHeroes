@@ -9,7 +9,7 @@
             _action = action;
         }
 
-        public override void Apply(HeroStatistic statistic)
+        public override void Apply(HeroAvatarBuilder statistic)
         {
             _action.CreateAction(statistic);
         }

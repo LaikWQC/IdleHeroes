@@ -10,7 +10,7 @@
         private static AvatarStats CreateDto() => new AvatarStats($"Dummy_{count++}", 2.5, 50);
         private static AbilitiesContainer CreateContainer()
         {
-            var statistic = new HeroStatistic();
+            var statistic = new HeroAvatarBuilder();
             statistic.Power = 5;
 
             var ability = new AbilityModel.Builder("Scare", 100, 80);

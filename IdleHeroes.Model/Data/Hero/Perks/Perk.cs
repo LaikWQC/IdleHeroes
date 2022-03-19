@@ -2,6 +2,6 @@
 {
     public abstract class Perk
     {
-        public abstract void Apply(HeroStatistic statistic);
+        public abstract void Apply(HeroAvatarBuilder statistic);
     }
 }

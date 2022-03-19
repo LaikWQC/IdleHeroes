@@ -9,7 +9,7 @@
             _effect = effect;
         }
 
-        public override void CreateAction(HeroStatistic statistic)
+        public override void CreateAction(HeroAvatarBuilder statistic)
         {
             var factory = _effect.EnsureCreateEffectFactory(statistic);
             statistic.Actions[_id] = new EffectActionModel.Builder(factory); 

@@ -3,7 +3,7 @@
     public interface IActionBuilder
     {
         ActionModel Product { get; }
-        void Finish(HeroStatistic statistic);
+        void Finish(HeroAvatarBuilder statistic);
     }
 
     public abstract class ActionModel

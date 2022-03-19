@@ -9,7 +9,7 @@
             _ability = ability;
         }
 
-        public override void Apply(HeroStatistic statistic)
+        public override void Apply(HeroAvatarBuilder statistic)
         {
             _ability.CreateAbility(statistic);
         }

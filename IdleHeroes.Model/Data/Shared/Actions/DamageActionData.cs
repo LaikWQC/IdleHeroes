@@ -9,7 +9,7 @@
             _potency = potency;
         }
 
-        public override void CreateAction(HeroStatistic statistic)
+        public override void CreateAction(HeroAvatarBuilder statistic)
         {
             statistic.Actions[_id] = new DamageActionModel.Builder(_potency);
         }

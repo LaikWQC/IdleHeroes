@@ -11,7 +11,7 @@ namespace IdleHeroes.Model
             _value = value;
         }
 
-        public override EffectFactory EnsureCreateEffectFactory(HeroStatistic statistic)
+        public override EffectFactory EnsureCreateEffectFactory(HeroAvatarBuilder statistic)
         {
             if (!statistic.Effects.TryGetValue(this, out var factory))
                 statistic.Effects[this] = factory = new MinDamageEffectFactory.Builder(_duration, _targetType, _value);

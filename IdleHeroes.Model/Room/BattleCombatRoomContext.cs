@@ -22,7 +22,7 @@ namespace IdleHeroes.Model
             
             _owner = owner;
 
-            Hero = _owner.Hero.CreateAvatar(new HeroBattleContext(this));
+            Hero = HeroAvatarBuilder.CreateAvatar(_owner.Hero, new HeroBattleContext(this));
             Hero.Died += ()=> _owner.EnterToIdle();
         }
 

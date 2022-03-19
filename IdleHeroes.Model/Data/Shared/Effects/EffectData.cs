@@ -13,6 +13,6 @@ namespace IdleHeroes.Model
             _duration = duration;
         }
 
-        public abstract EffectFactory EnsureCreateEffectFactory(HeroStatistic statistic);
+        public abstract EffectFactory EnsureCreateEffectFactory(HeroAvatarBuilder statistic);
     }
 }

@@ -11,7 +11,7 @@
             _actionId = actionId;
         }
 
-        public override void Apply(HeroStatistic statistic)
+        public override void Apply(HeroAvatarBuilder statistic)
         {
             if (statistic.Abilities.TryGetValue(_abilityId, out var ability) &&
                 statistic.Actions.TryGetValue(_actionId, out var action))

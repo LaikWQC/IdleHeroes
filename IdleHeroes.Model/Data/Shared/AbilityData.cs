@@ -15,7 +15,7 @@
             _chance = chance;
         }
 
-        public void CreateAbility(HeroStatistic statistic)
+        public void CreateAbility(HeroAvatarBuilder statistic)
         {
             statistic.Abilities[_id] = new AbilityModel.Builder(_name, _cooldownMulti, _chance);
         }
