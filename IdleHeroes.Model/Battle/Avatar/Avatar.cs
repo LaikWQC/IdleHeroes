@@ -40,9 +40,9 @@ namespace IdleHeroes.Model
             //TODO
         }
 
-        protected override void Update(double deltaTime)
+        protected override void Update()
         {
-            CurrentAbility.Cooldown.Current.Value += deltaTime * Stats.AttackSpeed;
+            CurrentAbility.Cooldown.Current.Value += DeltaTime * Stats.AttackSpeed;
             if (!CurrentAbility.Cooldown.IsMaxed) return;
 
             CurrentAbility.Ability.Value.UseAbility(_context);

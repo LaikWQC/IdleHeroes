@@ -2,6 +2,6 @@
 {
     public interface IBehaviour
     {
-        void Update(double deltaTime);
+        void Update();
     }    
 }

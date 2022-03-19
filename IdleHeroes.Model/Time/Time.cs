@@ -24,9 +24,9 @@ namespace IdleHeroes.Model.Time
             while (!token.IsCancellationRequested)
             {
                 var timeNow = DateTime.UtcNow;
-                var deltaTime = (timeNow - lastUpdateTime).TotalSeconds;
+                DeltaTime = (timeNow - lastUpdateTime).TotalSeconds;
                 lastUpdateTime = timeNow;
-                OnUpdate?.Invoke(deltaTime);
+                OnUpdate?.Invoke();
 
                 var nextUpdateTime = timeNow.AddSeconds(baseDeltaTime).AddMilliseconds(-1);
                 while (DateTime.UtcNow < nextUpdateTime)
@@ -34,7 +34,8 @@ namespace IdleHeroes.Model.Time
             }
         }
 
-        public event Action<double> OnUpdate;
+        public event Action OnUpdate;
+        public double DeltaTime { get; private set; }
 
         public void Start()
         {

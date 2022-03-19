@@ -22,6 +22,7 @@ namespace IdleHeroes.Model.Time
             UnSubscribeFromTime();
         }
 
-        protected virtual void Update(double deltaTime) { }
+        protected virtual void Update() { }
+        protected double DeltaTime => TimeService.Instance.DeltaTime;
     }
 }

@@ -4,8 +4,9 @@ namespace IdleHeroes.Model.Time
 {
     public interface ITime
     {
-        event Action<double> OnUpdate;
+        event Action OnUpdate;
         void Start();
         void Pause();
+        double DeltaTime { get; }
     }
 }

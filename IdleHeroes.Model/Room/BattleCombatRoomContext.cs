@@ -56,22 +56,22 @@ namespace IdleHeroes.Model
             }
         }
 
-        protected override void Update(double deltaTime)
+        protected override void Update()
         {
-            OnUpdate?.Invoke(deltaTime);
+            OnUpdate?.Invoke();
         }
-        protected Action<double> OnUpdate;
+        protected Action OnUpdate;
 
         private double _timeToSpawn;
-        protected void Spawn(double deltaTime)
+        protected void Spawn()
         {
-            _timeToSpawn -= deltaTime;
+            _timeToSpawn -= DeltaTime;
             if (_timeToSpawn > 0) return;
             CreateNewEnemy();
             State.Value = BattleContextStates.Battle;
         }
 
-        protected void DoNothing(double deltaTime) { }
+        protected void DoNothing() { }
 
         private void CreateNewEnemy()
         {

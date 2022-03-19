@@ -17,12 +17,13 @@ namespace IdleHeroes.Model.Services
             _time = time;
             _time.OnUpdate += OnTimerUpdate;
         }
-        private void OnTimerUpdate(double deltaTime)
+        private void OnTimerUpdate()
         {
-            OnUpdate?.Invoke(deltaTime);
+            OnUpdate?.Invoke();
         }
-        public event Action<double> OnUpdate;
+        public event Action OnUpdate;
         public void Start() => _time?.Start();
         public void Stop() => _time?.Pause();
+        public double DeltaTime => _time.DeltaTime;
     }
 }

@@ -18,9 +18,9 @@ namespace IdleHeroes.Model
         }
         public new HeroAvatarStats Stats { get; }
 
-        protected override void Update(double deltaTime) 
+        protected override void Update() 
         {
-            _behaviour?.Update(deltaTime);
+            _behaviour?.Update();
         }
         private IBehaviour _behaviour;
 
@@ -40,14 +40,14 @@ namespace IdleHeroes.Model
             }
         }
 
-        private void Regen(double deltaTime)
+        private void Regen()
         {
-            Stats.HP.Current.Value += Stats.HpRegen * deltaTime;
+            Stats.HP.Current.Value += Stats.HpRegen * DeltaTime;
         }
-        private void Battle(double deltaTime)
+        private void Battle()
         {
             //TODO дублирование кода, но с проверкой на State 
-            CurrentAbility.Cooldown.Current.Value += deltaTime * Stats.AttackSpeed;
+            CurrentAbility.Cooldown.Current.Value += DeltaTime * Stats.AttackSpeed;
             if (!CurrentAbility.Cooldown.IsMaxed) return;
 
             CurrentAbility.Ability.Value.UseAbility(_context);
@@ -65,10 +65,10 @@ namespace IdleHeroes.Model
                 _owner = owner;                
             }
 
-            public void Update(double deltaTime) 
+            public void Update() 
             {
-                _owner.Regen(deltaTime);
-                _maxWaitTime -= deltaTime;
+                _owner.Regen();
+                _maxWaitTime -= _owner.DeltaTime;
                 if (_owner.Stats.HP.IsMaxed || _maxWaitTime <= 0)
                     _owner._context.State = BattleContextStates.Hunting;
             }
@@ -83,7 +83,7 @@ namespace IdleHeroes.Model
                 _owner.RemoveAbility();
             }
 
-            public void Update(double deltaTime) { }
+            public void Update() { }
         }
         private class BattleBehaviour : IBehaviour
         {
@@ -95,9 +95,9 @@ namespace IdleHeroes.Model
                 _owner.ChooseAbility();
             }
 
-            public void Update(double deltaTime)
+            public void Update()
             {
-                _owner.Battle(deltaTime);
+                _owner.Battle();
             }
         }
     }
