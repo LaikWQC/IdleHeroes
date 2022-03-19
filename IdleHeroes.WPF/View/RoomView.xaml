@@ -11,49 +11,10 @@
         <ContentPresenter Content="{Binding RoomContext.Value}" Margin="5">
             <ContentPresenter.Resources>
                 <DataTemplate DataType="{x:Type models:BattleIdleRoomContext}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="5"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid Grid.Column="0">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Text="{Binding HeroJob.Name}" HorizontalAlignment="Center" Foreground="FloralWhite"/>
-                            <TextBlock Grid.Row="0" Text="{Binding HeroJob.Experience, StringFormat={}{0} exp}" HorizontalAlignment="Right" Margin="0 0 20 0" Foreground="FloralWhite"/>
-                            <Button Grid.Row="1" Content="Stats"/>
-                        </Grid>
-                        <Grid Grid.Column="2">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            <ComboBox Grid.Row="0" SelectedIndex="0">
-                                <ComboBoxItem Content="1st location"/>
-                            </ComboBox>
-                            <Button Grid.Row="1" Content="Move to location" Command="{Binding CmdMoveToLocation}"/>
-                        </Grid>
-                    </Grid>                    
+                    <local:BattleIdleRoomContextView/>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type models:BattleCombatRoomContext}">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="40"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Row="0" Grid.ColumnSpan="3" Text="{Binding State.Value}" Foreground="FloralWhite" HorizontalAlignment="Center"/>
-                        <Button Grid.Column="0" Grid.RowSpan="2" Content="Run" Command="{Binding CmdMoveBack}"/>
-                        <local:AvatarView Grid.Row="1" Grid.Column="1" DataContext="{Binding Hero}"/>
-                        <local:AvatarView Grid.Row="1" Grid.Column="2" DataContext="{Binding Enemy.Value}"/>                        
-                    </Grid>                                 
+                    <local:BattleCombatRoomContextView/>
                 </DataTemplate>
             </ContentPresenter.Resources>
         </ContentPresenter>

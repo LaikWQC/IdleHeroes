@@ -11,40 +11,38 @@ namespace IdleHeroes.Model
     {
         private readonly IBattleRoom _owner;
 
-        public BattleCombatRoomContext(IBattleRoom owner)
+        public BattleCombatRoomContext(IBattleRoom owner, HeroAvatar avatar, HeroBattleContext heroBattleContext)
         {
-            Enemy = PropertyService.Instance.CreateProperty<Avatar>();
-            State = PropertyService.Instance.CreateProperty(BattleContextStates.Idle);
+            Enemy = PropertyService.Instance.CreateProperty<Avatar>();            
             OnUpdate = DoNothing;
-            State.ValueChanged += OnStateChanged;
-            _enemyBattleContext = new EnemyBattleContext(this);
-            CmdMoveBack = new MyCommand(MoveBack);
+            CmdMoveBack = new MyCommand(EnterToIdle);
             
             _owner = owner;
+            BattleContext = heroBattleContext;
+            BattleContext.State.ValueChanged += OnStateChanged;
+            Enemy.ValueChanged += () => BattleContext.Enemy = Enemy.Value;
+            Hero = avatar;
+            Hero.Died += EnterToIdle;
 
-            Hero = HeroAvatarBuilder.CreateAvatar(_owner.Hero, new HeroBattleContext(this));
-            Hero.Died += ()=> _owner.EnterToIdle();
+            BattleContext.State.Value = BattleContextStates.Idle;
         }
 
         public override void Dispose()
         {
             base.Dispose();
-            Hero.Dispose();
+            Hero.Died -= EnterToIdle;
             Enemy.Value?.Dispose();
         }
-
-        private void MoveBack()
-        {
-            _owner.EnterToIdle();
-        }
+        private void EnterToIdle() => _owner.EnterToIdle(Hero, BattleContext);
         public ICommand CmdMoveBack { get; }
 
         public HeroAvatar Hero { get; }
+        public HeroBattleContext BattleContext { get; }
         public IProperty<Avatar> Enemy { get; }
-        public IProperty<BattleContextStates> State { get; }
+
         private void OnStateChanged()
         {
-            switch (State.Value)
+            switch (BattleContext.State.Value)
             {
                 case BattleContextStates.Hunting:
                     _timeToSpawn = 1; //TODO
@@ -68,51 +66,28 @@ namespace IdleHeroes.Model
             _timeToSpawn -= DeltaTime;
             if (_timeToSpawn > 0) return;
             CreateNewEnemy();
-            State.Value = BattleContextStates.Battle;
+            BattleContext.State.Value = BattleContextStates.Battle;
         }
 
         protected void DoNothing() { }
 
         private void CreateNewEnemy()
         {
-            if(Enemy.Value!=null)
+            if (Enemy.Value != null) 
             {
                 Enemy.Value.Dispose();
                 Enemy.Value.Died -= OnEnemyDied;
             }                
 
-            Enemy.Value = new EnemyAvatar(_enemyBattleContext); //TODO
+            Enemy.Value = new EnemyAvatar(new EnemyBattleContext(this)); 
             Enemy.Value.Died += OnEnemyDied;
         }
         private void OnEnemyDied()
         {
             Enemy.Value = null;
-            State.Value = BattleContextStates.Idle;
+            BattleContext.State.Value = BattleContextStates.Idle;
         }
 
-        private EnemyBattleContext _enemyBattleContext;
-        private class HeroBattleContext : IHeroBattleContext
-        {
-            private readonly BattleCombatRoomContext _owner;
-
-            public HeroBattleContext(BattleCombatRoomContext owner)
-            {
-                _owner = owner;
-            }
-
-            public ITarget Self => _owner.Hero;
-            public ITarget Enemy => _owner.Enemy.Value;
-            public BattleContextStates State 
-            {
-                get => _owner.State.Value;
-                set => _owner.State.Value = value;
-            }
-            public event Action StateChanged
-            {
-                add => _owner.State.ValueChanged += value;
-                remove => _owner.State.ValueChanged -= value;
-            }
-        }
         private class EnemyBattleContext : IBattleContext
         {
             private readonly BattleCombatRoomContext _owner;

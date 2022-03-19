@@ -16,13 +16,8 @@ namespace IdleHeroes.Model
         public void SetAbility(AbilityModel ability)
         {
             Ability.Value = ability;
-            if (ability == null)
-                Cooldown.Max.Value = 0;
-            else
-            {
-                Cooldown.Max.Value = ability.CooldownMulti / 100D;
-                Cooldown.Current.Value = 0;
-            }            
+            Cooldown.Max.Value = ability?.CooldownMulti / 100D ?? 1;
+            Cooldown.Current.Value = 0;
         }
     }
 }

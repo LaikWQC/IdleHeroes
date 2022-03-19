@@ -6,16 +6,15 @@ namespace IdleHeroes.Model
 {
     public class HeroAvatar : Avatar
     {
-        private IHeroBattleContext _context;
-
         public HeroAvatar(HeroAvatarStats stats, AbilitiesContainer container, IHeroBattleContext context) : base(stats, container, context)
         {
-            _context = context;
+            BattleContext = context;
             Stats = stats;
 
             SelectBehaviour();
-            _context.StateChanged += SelectBehaviour;
+            BattleContext.State.ValueChanged += SelectBehaviour;
         }
+        public IHeroBattleContext BattleContext { get; }
         public new HeroAvatarStats Stats { get; }
 
         protected override void Update() 
@@ -26,8 +25,11 @@ namespace IdleHeroes.Model
 
         private void SelectBehaviour()
         {
-            switch (_context.State)
+            switch (BattleContext.State.Value)
             {
+                case BattleContextStates.Safe:
+                    _behaviour = new SafeBehaviour(this);
+                    break;
                 case BattleContextStates.Idle:
                     _behaviour = new IdleBehaviour(this);
                     break;
@@ -40,9 +42,9 @@ namespace IdleHeroes.Model
             }
         }
 
-        private void Regen()
+        private void Regen(double multi = 1)
         {
-            Stats.HP.Current.Value += Stats.HpRegen * DeltaTime;
+            Stats.HP.Current.Value += Stats.HpRegen * multi * DeltaTime;
         }
         private void Battle()
         {
@@ -50,28 +52,38 @@ namespace IdleHeroes.Model
             CurrentAbility.Cooldown.Current.Value += DeltaTime * Stats.AttackSpeed;
             if (!CurrentAbility.Cooldown.IsMaxed) return;
 
-            CurrentAbility.Ability.Value.UseAbility(_context);
-            if (_context.State != BattleContextStates.Battle) return;
+            CurrentAbility.Ability.Value.UseAbility(BattleContext);
+            if (BattleContext.State.Value != BattleContextStates.Battle) return;
             ChooseAbility();
         }
 
+        private class SafeBehaviour: IBehaviour
+        {
+            private readonly HeroAvatar _owner;
+
+            public SafeBehaviour(HeroAvatar owner)
+            {
+                _owner = owner;
+                _owner.RemoveAbility();
+            }
+
+            public void Update()
+            {
+                _owner.Regen();
+            }
+        }
         private class IdleBehaviour : IBehaviour
         {
             private readonly HeroAvatar _owner;
-            private double _maxWaitTime = 2d;
 
             public IdleBehaviour(HeroAvatar owner)
             {
-                _owner = owner;                
+                _owner = owner; 
+                _owner.RemoveAbility();
+                _owner.BattleContext.State.Value = BattleContextStates.Hunting;
             }
 
-            public void Update() 
-            {
-                _owner.Regen();
-                _maxWaitTime -= _owner.DeltaTime;
-                if (_owner.Stats.HP.IsMaxed || _maxWaitTime <= 0)
-                    _owner._context.State = BattleContextStates.Hunting;
-            }
+            public void Update() { }
         }
         private class HuntingBehaviour : IBehaviour
         {
@@ -83,7 +95,10 @@ namespace IdleHeroes.Model
                 _owner.RemoveAbility();
             }
 
-            public void Update() { }
+            public void Update() 
+            {
+                _owner.Regen(0.5);
+            }
         }
         private class BattleBehaviour : IBehaviour
         {
