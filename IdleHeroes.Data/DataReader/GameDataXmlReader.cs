@@ -1,255 +1,85 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 
 namespace IdleHeroes.Data
 {
-    public class GameDataXmlReader
+    public static class GameDataXmlReader
     {
-        private readonly IDataError _error;
-        public DataDocument Product { get; private set; }
-
-        public GameDataXmlReader(IDataError error)
+        public static void ReadFromResources(IHeroBuilder builder)
         {
-            _error = error;
+            Read(XDocument.Parse(GameResources.GameData), builder);
         }
 
-        public void ReadFromResources()
+        private static void Read(XDocument xDoc, IHeroBuilder builder)
         {
-            Read(XDocument.Parse(GameResources.GameData));
-        }
-
-        private void Read(XDocument xDoc)
-        {
-            Product = new DataDocument();
-
             var xJobs = xDoc.Root.Elements("Jobs").Elements("Job");
-            foreach(var xJob in xJobs)
+            foreach (var xJob in xJobs)
             {
-                var job = new JobDto()
+                var jobBuilder = builder.CreateJob(xJob.ParseName());
+                foreach(var xPerk in xJob.Element("Perks").Elements())
                 {
-                    Name = xJob.ParseName(),
-                    Tags = xJob.ParseTags().ToList()
-                };
-                Product.Jobs.Add(job);
-
-                var xSharedPerks = xJob.Elements("SharedPerks").Elements();
-                var sharedPerks = new Dictionary<string, PerkDto>();
-                foreach(var xSharedPerk in xSharedPerks)
-                {
-                    var id = xSharedPerk.ParseToString("SharedId");
-                    if (sharedPerks.ContainsKey(id))
-                        _error.RepeatedSharedPerkIdError(id);
-                    else
-                        sharedPerks.Add(id, CreatePerk(xSharedPerk));
-                }
-                
-                var xPerkPoints = xJob.Elements("Perks").Elements();
-                foreach(var xPerkPoint in xPerkPoints)
-                {
-                    var perkPoint = new PerkPointDto()
+                    switch(xPerk.Name.LocalName)
                     {
-                        Id = xPerkPoint.ParseId(),
-                        Price = xPerkPoint.ParseToIntOrDefault("Price")
-                    };
-                    job.PerkPoints.Add(perkPoint);
-
-                    var xPerks = xPerkPoint.Elements().ToList();
-                    xPerks.ForEach(x => perkPoint.Values.Add(CreatePerkValue(x, sharedPerks)));
+                        case "Ability":
+                            AddAbility(xPerk, jobBuilder);
+                            break;
+                    }
                 }
             }
+        }
 
-            var xAbilities = xDoc.Root.Elements("Abilities").Elements();
-            foreach(var xAbility in xAbilities)
+        private static void AddAbility(XElement xAbility, IJobBuilder builder)
+        {
+            var ability = new AbilityDto()
             {
-                Product.Abilities.Add(new AbilityDto()
-                {
-                    Id = xAbility.ParseId(),
-                    Name = xAbility.ParseName(),
-                    CooldownMulti = xAbility.ParseToIntOrDefault("Cd"),
-                    Chance = xAbility.ParseToInt("Chance")
-                });
-            }
+                Id = xAbility.ParseId(),
+                Name = xAbility.ParseName(),
+                TargetType = xAbility.ParseToAbilityTargetType(),
+                ChanceType = xAbility.ParseToChanceType(),
+                Chance = xAbility.ParseToIntOrDefault("Chance")
+            };
+            var abilityBuilder = builder.AddAbility(ability);
 
-            var xActions = xDoc.Root.Elements("Actions").Elements();
-            foreach(var xAction in xActions)
+            foreach (var xAction in xAbility.Elements())
             {
-                switch(xAction.Name.LocalName)
+                switch (xAction.Name.LocalName)
                 {
                     case "Damage":
-                        Product.Actions.Add(new DamageActionDto()
-                        {
-                            Id = xAction.ParseId(),
-                            Potency = xAction.ParseToIntOrDefault("Potency")
-                        });
+                        abilityBuilder.AddDamage(xAction.ParseToIntOrDefault("Potency"));
                         break;
                     case "Effect":
-                        Product.Actions.Add(new EffectActionDto()
-                        {
-                            Id = xAction.ParseId(),
-                            EffectId = xAction.ParseToString("EffectId")
-                        });
-                        break;
-                    default:
-                        _error.IncorrectActionTypeError(xAction.Name.LocalName);
+                        AddEffect(xAction, abilityBuilder);
                         break;
                 }
             }
+        }
 
-            var xEffects = xDoc.Root.Elements("Effects").Elements().ToList();
-            foreach (var xEffect in xEffects)
+        private static void AddEffect(XElement xEffect, IAbilityBuilder builder)
+        {
+            var effect = new EffectDto()
             {
-                switch (xEffect.Name.LocalName)
+                TargetType = xEffect.ParseToEffectTargetType(),
+                DurationType = xEffect.ParseToDurationType(),
+                Duration = xEffect.ParseToIntOrDefault("Duration")
+            };
+            var effectBuilder = builder.AddEffect(effect);
+
+            foreach (var xEffectAction in xEffect.Elements())
+            {
+                switch (xEffectAction.Name.LocalName)
                 {
                     case "MinDamage":
-                        Product.Effects.Add(new MinDamageEffectDto()
-                        {
-                            Id = xEffect.ParseId(),
-                            TargetType = xEffect.ParseToEffectTargetType(),
-                            Duration = xEffect.ParseToIntOrDefault("Duration"),
-                            Value = xEffect.ParseToIntOrDefault("Value")
-                        });
+                        effectBuilder.AddMinDamage(xEffectAction.ParseToIntOrDefault("Value"));
                         break;
                     case "DoT":
-                        Product.Effects.Add(new DoTEffectDto()
-                        {
-                            Id = xEffect.ParseId(),
-                            TargetType = xEffect.ParseToEffectTargetType(),
-                            Duration = xEffect.ParseToIntOrDefault("Duration"),
-                            Potency = xEffect.ParseToIntOrDefault("Potency")
-                        });
+                        effectBuilder.AddDoT(xEffectAction.ParseToIntOrDefault("Potency"));
                         break;
                     case "IncomingDamage":
-                        Product.Effects.Add(new IncomingDamageEffectDto()
-                        {
-                            Id = xEffect.ParseId(),
-                            TargetType = xEffect.ParseToEffectTargetType(),
-                            Duration = xEffect.ParseToIntOrDefault("Duration"),
-                            Value = xEffect.ParseToIntOrDefault("Value")
-                        });
-                        break;
-                    default:
-                        _error.IncorrectEffectTypeError(xEffect.Name.LocalName);
+                        effectBuilder.AddIncomingDamage(xEffectAction.ParseToIntOrDefault("Value"));
                         break;
                 }
             }
-        }
-
-        private PerkDto CreatePerk(XElement xPerk)
-        {
-            switch(xPerk.Name.LocalName)
-            {
-                case "Ability":
-                    return new AbilityPerkDto() { AbilityId = xPerk.ParseToString("AbilityId") };
-                case "Action":
-                    return new ActionPerkDto() { ActionId = xPerk.ParseToString("ActionId") };
-                case "Link":
-                    return new LinkPerkDto() 
-                    { 
-                        ActionId = xPerk.ParseToString("ActionId"), 
-                        AbilityId = xPerk.ParseToString("AbilityId") 
-                    };
-                default:
-                    _error.IncorrectPerkTypeError(xPerk.Name.LocalName);
-                    return new NoPerkDto();
-            }
-        }
-
-        private PerkValueDto CreatePerkValue(XElement xPerk, Dictionary<string,PerkDto> sharedPerks)
-        {
-            var value = new PerkValueDto() { Tags = xPerk.ParseTags().ToList() };
-            switch (xPerk.Name.LocalName)
-            {
-                case "Shared":
-                    var id = xPerk.ParseId();
-                    if (sharedPerks.TryGetValue(id, out var perk))
-                        value.Perk = perk;
-                    else
-                    {
-                        _error.NoSharedPerkError(id);
-                        value.Perk = new NoPerkDto();
-                    }
-                    break;
-                default: 
-                    value.Perk = CreatePerk(xPerk);
-                    break;
-            }
-            return value;
-        }
-    }
-
-    public static class XmlDataEx
-    {
-        public static string ParseId(this XElement element)
-        {
-            return element.ParseToString("Id");
-        }
-        public static string ParseName(this XElement element)
-        {
-            return element.ParseToString("Name");
-        }
-        public static IEnumerable<Tags> ParseTags(this XElement element)
-        {
-            return element.ParseToStringsCollection("Tags").Select(x => x.ParseToEnum<Tags>());            
-        }
-        public static EffectTargetTypes ParseToEffectTargetType(this XElement element)
-        {
-            return element.ParseToEnum<EffectTargetTypes>("Target");
-        }
-
-        public static string ParseToString(this XElement element, string attribute)
-        {
-            return element.Attribute(attribute).ParseToString();
-        }
-        public static string ParseToString(this XAttribute attribute)
-        {
-            return attribute.Value.ToString();
-        }
-
-        public static IEnumerable<string> ParseToStringsCollection(this XElement element, string attribute)
-        {
-            return element.Attribute(attribute).ParseToStringsCollection();
-        }
-        public static IEnumerable<string> ParseToStringsCollection(this XAttribute attribute)
-        {
-            return attribute.Value.ToString().Split(",", StringSplitOptions.RemoveEmptyEntries);
-        }
-
-        public static int ParseToIntOrDefault(this XElement element, string attribute)
-        {
-            return element.ParseToInt(attribute) ?? 0;
-        }
-        public static int? ParseToInt(this XElement element, string attribute)
-        {
-            return element.Attribute(attribute)?.ParseToInt();
-        }
-        public static int ParseToInt(this XAttribute attribute)
-        {
-            return int.Parse(attribute.Value.ToString());
-        }
-
-        public static double ParseToDouble(this XElement element, string attribute)
-        {
-            return element.Attribute(attribute).ParseToDouble();
-        }
-        public static double ParseToDouble(this XAttribute attribute)
-        {
-            return double.Parse(attribute.Value.ToString(), System.Globalization.CultureInfo.InvariantCulture);
-        }
-
-        public static T ParseToEnum<T>(this XElement element, string attribute) where T : struct
-        {
-            return element.Attribute(attribute).ParseToEnum<T>();
-        }
-        public static T ParseToEnum<T>(this XAttribute attribute) where T : struct
-        {
-            return attribute.Value.ToString().ParseToEnum<T>();
-        }
-        public static T ParseToEnum<T>(this string value) where T : struct
-        {
-            Enum.TryParse(value, out T result);
-            return result;
         }
     }
 }

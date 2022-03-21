@@ -20,7 +20,7 @@ namespace IdleHeroes.Model
             foreach(var job in doc.Jobs)
             {
                 var perkFactories = new List<PerkPointFactory>();
-                foreach(var perkPoint in job.PerkPoints)
+                foreach(var perkPoint in job.Perks)
                     perkFactories.Add(new PerkPointFactory(perkPoint.Id, perkPoint.Price, perkPoint.Values.Select(x => new PerkValue(perkConverter.Convert(x.Perk), x.Tags))));
                 jobFactories.Add(new JobFactory(job.Name, job.Tags, perkFactories));
             }
