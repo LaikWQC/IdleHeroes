@@ -2,16 +2,11 @@
 {
     public class DamageActionData : ActionData
     {
-        private readonly int _potency;
-
         public DamageActionData(string id, int potency) : base(id)
         {
-            _potency = potency;
+            Potency = potency;
         }
 
-        public override void CreateAction(HeroAvatarBuilder statistic)
-        {
-            statistic.Actions[_id] = new DamageActionModel.Builder(_potency);
-        }
+        public int Potency { get; }
     }
 }

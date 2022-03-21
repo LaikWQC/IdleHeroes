@@ -1,6 +1,6 @@
 ﻿namespace IdleHeroes.Data
 {
-    public interface IEffectBuilder
+    public interface IEffectDataBuilder
     {
         void AddMinDamage(int value);
         void AddDoT(int potency);

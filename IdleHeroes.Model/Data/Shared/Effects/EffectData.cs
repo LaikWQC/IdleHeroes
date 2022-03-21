@@ -1,18 +1,22 @@
 ﻿using IdleHeroes.Data;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace IdleHeroes.Model
 {
-    public abstract class EffectData
+    public class EffectData
     {
-        protected readonly EffectTargetTypes _targetType;
-        protected readonly int _duration;
-
-        public EffectData(EffectTargetTypes targetType, int duration)
+        public EffectData(EffectDto dto, IEnumerable<EffectAction> actions)
         {
-            _targetType = targetType;
-            _duration = duration;
+            TargetType = dto.TargetType;
+            DurationType = dto.DurationType;
+            Duration = dto.Duration;
+            Actions = actions.ToList().AsReadOnly();
         }
 
-        public abstract EffectFactory EnsureCreateEffectFactory(HeroAvatarBuilder statistic);
+        public EffectTargetTypes TargetType { get; }
+        public DurationTypes DurationType { get; }
+        public int Duration { get; }
+        public ICollection<EffectAction> Actions { get; }
     }
 }

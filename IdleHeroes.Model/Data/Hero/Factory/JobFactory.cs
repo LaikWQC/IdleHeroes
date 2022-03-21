@@ -6,19 +6,17 @@ namespace IdleHeroes.Model
 {
     public class JobFactory
     {
-        private readonly List<Tags> _tags;
-        private readonly List<PerkPointFactory> _perks;
+        private readonly List<PerkFactory> _perks;
 
-        public JobFactory(string name, IEnumerable<Tags> tags, IEnumerable<PerkPointFactory> perks)
+        public JobFactory(string name, IEnumerable<PerkFactory> perks)
         {
             Name = name;
-            _tags = tags.ToList();
             _perks = perks.ToList();
         }
 
         public JobModel CreateJob()
         {
-            return new JobModel(Name, _perks, _tags);
+            return new JobModel(Name, _perks);
         }
 
         public string Name { get; }

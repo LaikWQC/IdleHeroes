@@ -7,21 +7,14 @@ namespace IdleHeroes.Model
 {
     public class JobModel
     {
-        private PerksCollector _collector;
-
-        public JobModel(string name, IEnumerable<PerkPointFactory> perkFactories, IEnumerable<Tags> tags)
+        public JobModel(string name, IEnumerable<PerkFactory> perkFactories)
         {
             Name = name;
-            _collector = new PerksCollector();
-            Perks = perkFactories.Select(x => x.CreatePerk(this, _collector)).ToList().AsReadOnly();
-            AvailableTags = tags.ToList().AsReadOnly();
+            Perks = perkFactories.Select(x => x.CreatePerk(this)).ToList().AsReadOnly();
         }
 
-        public ICollection<PerkPoint> Perks { get; }
-        public ICollection<Tags> AvailableTags { get; }
+        public ICollection<Perk> Perks { get; }
         public string Name { get; }
         public int Experience { get; set; }
-
-        public IEnumerable<Perk> GetPerks(ICollection<Tags> tags) => _collector.GetPerks(tags);
     }
 }

@@ -2,20 +2,13 @@
 
 namespace IdleHeroes.Model
 {
-    public class IncomingDamageEffectData : EffectData
+    public class IncomingDamageEffectData : EffectAction
     {
-        private readonly int _value;
-
-        public IncomingDamageEffectData(EffectTargetTypes targetType, int duration, int value) : base(targetType, duration)
+        public IncomingDamageEffectData(int value) 
         {
-            _value = value;
+            Value = value;
         }
 
-        public override EffectFactory EnsureCreateEffectFactory(HeroAvatarBuilder statistic)
-        {
-            if (!statistic.Effects.TryGetValue(this, out var factory))
-                statistic.Effects[this] = factory = new IncommingDamageEffectFactory.Builder(_duration, _targetType, _value);
-            return factory.Product;
-        }
+        public int Value { get; }
     }
 }

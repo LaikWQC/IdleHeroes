@@ -6,12 +6,12 @@ namespace IdleHeroes.Data
 {
     public static class GameDataXmlReader
     {
-        public static void ReadFromResources(IHeroBuilder builder)
+        public static void ReadFromResources(IHeroDataBuilder builder)
         {
             Read(XDocument.Parse(GameResources.GameData), builder);
         }
 
-        private static void Read(XDocument xDoc, IHeroBuilder builder)
+        private static void Read(XDocument xDoc, IHeroDataBuilder builder)
         {
             var xJobs = xDoc.Root.Elements("Jobs").Elements("Job");
             foreach (var xJob in xJobs)
@@ -29,7 +29,7 @@ namespace IdleHeroes.Data
             }
         }
 
-        private static void AddAbility(XElement xAbility, IJobBuilder builder)
+        private static void AddAbility(XElement xAbility, IJobDataBuilder builder)
         {
             var ability = new AbilityDto()
             {
@@ -55,7 +55,7 @@ namespace IdleHeroes.Data
             }
         }
 
-        private static void AddEffect(XElement xEffect, IAbilityBuilder builder)
+        private static void AddEffect(XElement xEffect, IAbilityDataBuilder builder)
         {
             var effect = new EffectDto()
             {

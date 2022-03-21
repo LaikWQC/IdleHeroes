@@ -1,6 +1,6 @@
 ﻿namespace IdleHeroes.Model
 {
-    public class AbilityPerk : Perk
+    public class AbilityPerk : PerkData
     {
         private readonly AbilityData _ability;
 
