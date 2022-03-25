@@ -1,56 +1,34 @@
-﻿using System.Collections.Generic;
+﻿using IdleHeroes.Data;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace IdleHeroes.Model
 {
-    public interface IAbilityBuilder 
-    {
-        void AddAction(ActionModel action);
-        AbilityModel Product { get; }
-        void Finish();
-    }
-
     public class AbilityModel
     {
-        public static AbilityModel CreateEmpty(string name = "Miss") => new AbilityModel(name) { CooldownMulti = 100 };
-        private AbilityModel(string name)
+        private List<ActionModel> _actions;
+        private AbilityTargetTypes _targetType;
+
+        public AbilityModel(string name, AbilityTargetTypes targetType, ChanceTypes chanceType, int chance, IEnumerable<ActionModel> actions)
         {
             Name = name;
+            _targetType = targetType;
+            ChanceType = chanceType;
+            Chance = chance;
+            _actions = actions.ToList();
         }
 
-        public int CooldownMulti { get; private set; }
-        public int? Chance { get; private set; }
         public string Name { get; }
+        public ChanceTypes ChanceType { get; }
+        public int Chance { get; }
 
-        private List<ActionModel> _actions = new List<ActionModel>();
+
         public void UseAbility(IBattleContext context)
         {
             foreach(var action in _actions)
             {
-                action.UseAction(context.Enemy); //TODO target by type
-            }
-        }
-
-        public class Builder : IAbilityBuilder
-        {
-            private List<ActionModel> _actions = new List<ActionModel>();
-            public Builder(string name, int cooldownMulti, int? chance)
-            {
-                Product = new AbilityModel(name);
-                Product.CooldownMulti = cooldownMulti;
-                Product.Chance = chance;
-            }
-
-            public void AddAction(ActionModel action)
-            {
-                _actions.Add(action);
-            }
-
-            public AbilityModel Product { get; }
-
-            public void Finish()
-            {
-                Product._actions.AddRange(_actions); //TODO Order
+                action.UseAction(context); //TODO set target by type
             }
         }
     }

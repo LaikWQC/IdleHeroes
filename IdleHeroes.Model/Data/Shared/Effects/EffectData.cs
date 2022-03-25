@@ -6,17 +6,19 @@ namespace IdleHeroes.Model
 {
     public class EffectData
     {
-        public EffectData(EffectDto dto, IEnumerable<EffectAction> actions)
+        public EffectData(EffectDto dto, IEnumerable<ActionOfEffectData> actions)
         {
+            Id = dto.Id;
             TargetType = dto.TargetType;
             DurationType = dto.DurationType;
             Duration = dto.Duration;
             Actions = actions.ToList().AsReadOnly();
         }
 
+        public string Id { get; }
         public EffectTargetTypes TargetType { get; }
         public DurationTypes DurationType { get; }
         public int Duration { get; }
-        public ICollection<EffectAction> Actions { get; }
+        public ICollection<ActionOfEffectData> Actions { get; }
     }
 }

@@ -2,7 +2,7 @@
 {
     public interface IAbilityDataBuilder
     {
-        void AddDamage(int potency);
+        void AddDamage(string id, int potency);
         IEffectDataBuilder AddEffect(EffectDto effect);
     }
 }

@@ -2,6 +2,6 @@
 {
     public interface IJobDataBuilder
     {
-        IAbilityDataBuilder AddAbility(AbilityDto ability);
+        IAbilityDataBuilder AddAbilityPerk(PerkDto perk, AbilityDto ability);
     }
 }

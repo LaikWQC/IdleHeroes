@@ -7,34 +7,34 @@ namespace IdleHeroes.Model
     {
         private class EffectDataBuilder : IEffectDataBuilder, IActionDataBuilder
         {
-            private readonly string _id;
+            private readonly string _abilityId;
             private readonly EffectDto _effect;
-            private List<EffectAction> _actions;
+            private List<ActionOfEffectData> _actions = new List<ActionOfEffectData>();
 
-            public EffectDataBuilder(string id, EffectDto effect)
+            public EffectDataBuilder(EffectDto effect, string abilityId)
             {
-                _id = id;
+                _abilityId = abilityId;
                 _effect = effect;
             }
 
-            public void AddDoT(int potency)
+            public void AddDoT(string id, int potency)
             {
-                _actions.Add(new DoTEffectData(potency));
+                _actions.Add(new DoTEffectData(id, _effect.Id, potency));
             }
 
-            public void AddIncomingDamage(int value)
+            public void AddIncomingDamage(string id, int value)
             {
-                _actions.Add(new IncomingDamageEffectData(value));
+                _actions.Add(new IncomingDamageEffectData(id, _effect.Id, value));
             }
 
-            public void AddMinDamage(int value)
+            public void AddMinDamage(string id, int value)
             {
-                _actions.Add(new MinDamageEffectData(value));
+                _actions.Add(new MinDamageEffectData(id, _effect.Id, value));
             }
 
             public ActionData Create()
             {
-                return new EffectActionData(_id, new EffectData(_effect, _actions));
+                return new EffectActionData(_effect.Id, _abilityId, new EffectData(_effect, _actions));
             }
         }
     }

@@ -8,22 +8,24 @@ namespace IdleHeroes.Model
     {
         private class AbilityFactoryBuilder : IAbilityDataBuilder
         {
+            private readonly PerkDto _perk;
             private readonly AbilityDto _ability;
             private List<IActionDataBuilder> _actions = new List<IActionDataBuilder>();
 
-            public AbilityFactoryBuilder(AbilityDto ability)
+            public AbilityFactoryBuilder(PerkDto perk, AbilityDto ability)
             {
+                _perk = perk;
                 _ability = ability;
             }
 
-            public void AddDamage(int potency)
+            public void AddDamage(string id, int potency)
             {
-                _actions.Add(new DamageActionDataBuilder(_ability.Id, potency));
+                _actions.Add(new DamageActionDataBuilder(id, _ability.Id, potency));
             }
 
             public IEffectDataBuilder AddEffect(EffectDto effect)
             {
-                var builder = new EffectDataBuilder(_ability.Id, effect);
+                var builder = new EffectDataBuilder(effect, _ability.Id);
                 _actions.Add(builder);
                 return builder;
             }
@@ -31,7 +33,7 @@ namespace IdleHeroes.Model
             public PerkFactory Create()
             {
                 var ability = new AbilityData(_ability, _actions.Select(x => x.Create()));
-                var perk = new AbilityPerk(ability);
+                var perk = new AbilityPerk(_perk, ability);
                 return new PerkFactory(perk);
             }
         }

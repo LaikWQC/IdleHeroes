@@ -16,9 +16,9 @@ namespace IdleHeroes.Model
                 _name = name;
             }
 
-            public IAbilityDataBuilder AddAbility(AbilityDto ability)
+            public IAbilityDataBuilder AddAbilityPerk(PerkDto perk, AbilityDto ability)
             {
-                var builder = new AbilityFactoryBuilder(ability);
+                var builder = new AbilityFactoryBuilder(perk, ability);
                 _abilities.Add(builder);
                 return builder;
             }

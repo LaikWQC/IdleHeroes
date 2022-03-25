@@ -19,46 +19,54 @@ namespace IdleHeroes.Data
                 var jobBuilder = builder.CreateJob(xJob.ParseName());
                 foreach(var xPerk in xJob.Element("Perks").Elements())
                 {
-                    switch(xPerk.Name.LocalName)
+                    var perk = new PerkDto()
+                    {
+                        Id = xPerk.ParseId(),
+                        ShareType = xPerk.ParseToShareType(),
+                        Price = xPerk.ParseToInt("Price")
+                    };
+                    switch (xPerk.Name.LocalName)
                     {
                         case "Ability":
-                            AddAbility(xPerk, jobBuilder);
+                            AddAbility(perk, xPerk, jobBuilder);
                             break;
                     }
                 }
             }
         }
 
-        private static void AddAbility(XElement xAbility, IJobDataBuilder builder)
+        private static void AddAbility(PerkDto perk, XElement xAbility, IJobDataBuilder builder)
         {
             var ability = new AbilityDto()
             {
-                Id = xAbility.ParseId(),
+                Id = perk.Id,
                 Name = xAbility.ParseName(),
                 TargetType = xAbility.ParseToAbilityTargetType(),
                 ChanceType = xAbility.ParseToChanceType(),
                 Chance = xAbility.ParseToIntOrDefault("Chance")
             };
-            var abilityBuilder = builder.AddAbility(ability);
+            var abilityBuilder = builder.AddAbilityPerk(perk, ability);
 
             foreach (var xAction in xAbility.Elements())
             {
+                var id = xAction.ParseId() ?? ability.Id;
                 switch (xAction.Name.LocalName)
                 {
                     case "Damage":
-                        abilityBuilder.AddDamage(xAction.ParseToIntOrDefault("Potency"));
+                        abilityBuilder.AddDamage(id, xAction.ParseToIntOrDefault("Potency"));
                         break;
                     case "Effect":
-                        AddEffect(xAction, abilityBuilder);
+                        AddEffect(id, xAction, abilityBuilder);
                         break;
                 }
             }
         }
 
-        private static void AddEffect(XElement xEffect, IAbilityDataBuilder builder)
+        private static void AddEffect(string id, XElement xEffect, IAbilityDataBuilder builder)
         {
             var effect = new EffectDto()
             {
+                Id = id,
                 TargetType = xEffect.ParseToEffectTargetType(),
                 DurationType = xEffect.ParseToDurationType(),
                 Duration = xEffect.ParseToIntOrDefault("Duration")
@@ -67,16 +75,17 @@ namespace IdleHeroes.Data
 
             foreach (var xEffectAction in xEffect.Elements())
             {
+                var actionId = xEffectAction.ParseId() ?? id;
                 switch (xEffectAction.Name.LocalName)
                 {
                     case "MinDamage":
-                        effectBuilder.AddMinDamage(xEffectAction.ParseToIntOrDefault("Value"));
+                        effectBuilder.AddMinDamage(actionId, xEffectAction.ParseToIntOrDefault("Value"));
                         break;
                     case "DoT":
-                        effectBuilder.AddDoT(xEffectAction.ParseToIntOrDefault("Potency"));
+                        effectBuilder.AddDoT(actionId, xEffectAction.ParseToIntOrDefault("Potency"));
                         break;
                     case "IncomingDamage":
-                        effectBuilder.AddIncomingDamage(xEffectAction.ParseToIntOrDefault("Value"));
+                        effectBuilder.AddIncomingDamage(actionId, xEffectAction.ParseToIntOrDefault("Value"));
                         break;
                 }
             }

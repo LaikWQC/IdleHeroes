@@ -2,7 +2,8 @@
 {
     public class EffectDto
     {
-        public EffectTargetTypes TargetType {get;set; }
+        public string Id { get; set; }
+        public EffectTargetTypes TargetType { get; set; }
         public DurationTypes DurationType { get; set; }
         public int Duration { get; set; }
     }

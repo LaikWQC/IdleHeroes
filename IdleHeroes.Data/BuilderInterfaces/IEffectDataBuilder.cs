@@ -2,8 +2,8 @@
 {
     public interface IEffectDataBuilder
     {
-        void AddMinDamage(int value);
-        void AddDoT(int potency);
-        void AddIncomingDamage(int value);
+        void AddMinDamage(string id, int value);
+        void AddDoT(string id, int potency);
+        void AddIncomingDamage(string id, int value);
     }
 }

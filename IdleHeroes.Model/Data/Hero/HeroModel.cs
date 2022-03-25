@@ -19,6 +19,6 @@ namespace IdleHeroes.Model
             var job = Jobs.FirstOrDefault(x => x.Name == name);
             if (job != null) CurrentJob = job;
         }
-        public IEnumerable<IPerk> GetPerks() => Jobs.SelectMany(job => job.Perks.Where(perk=>perk.IsBought).Select(x=>x.Value));
+        public IEnumerable<IPerk> GetPerks() => Jobs.SelectMany(job => job.Perks.Where(perk=>perk.IsAllowTo(CurrentJob)).Select(x=>x.Value));
     }
 }

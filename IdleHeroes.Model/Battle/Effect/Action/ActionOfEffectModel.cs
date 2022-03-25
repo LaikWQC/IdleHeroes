@@ -1,6 +1,6 @@
 ﻿namespace IdleHeroes.Model
 {
-    public abstract class EffectAction
+    public abstract class ActionOfEffectModel
     {
 
     }

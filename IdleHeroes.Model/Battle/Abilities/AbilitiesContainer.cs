@@ -34,22 +34,44 @@ namespace IdleHeroes.Model
         private void CalculateChances()
         {
             _abilitiesChance.Clear();
-            var withChance = _abilities.Where(x => x.Chance.HasValue).ToList();
-            var combinedChance = withChance.Sum(x => x.Chance.Value);
-            var chanceMulti = combinedChance > 100 ? 100D / combinedChance : 1;
-            foreach(var ability in withChance)
-                _abilitiesChance.Add((ability, ability.Chance.Value * chanceMulti));
-            if(combinedChance<100)
+            var hight = _abilities.Where(x => x.ChanceType == Data.ChanceTypes.Hight).ToList();
+            var hightChance = hight.Sum(x => x.Chance);
+            if (hightChance >= 100) 
             {
-                var restChance = 100 - combinedChance;
-                var withNoChance = _abilities.Where(x => !x.Chance.HasValue).ToList();
-                if(withNoChance.Count==0)
-                    _abilitiesChance.Add((AbilityModel.CreateEmpty(), restChance));
+                var chanceMulti = 100D / hightChance;
+                foreach (var ability in hight)
+                    _abilitiesChance.Add((ability, ability.Chance * chanceMulti));
+            }
+            else
+            {
+                foreach (var ability in hight)
+                    _abilitiesChance.Add((ability, ability.Chance));
+
+                var normal = _abilities.Where(x => x.ChanceType == Data.ChanceTypes.Normal).ToList();
+                var combinedChance = normal.Sum(x => x.Chance) + hightChance;
+                if (combinedChance >= 100)
+                {
+                    var restChance = 100 - combinedChance;
+                    combinedChance = normal.Sum(x => x.Chance);
+                    var chanceMulti = (double)restChance / hightChance;
+                    foreach (var ability in normal)
+                        _abilitiesChance.Add((ability, ability.Chance * chanceMulti));
+                }
                 else
                 {
-                    var sharedChance = 1d * restChance / withNoChance.Count;
-                    foreach (var ability in withNoChance)
-                        _abilitiesChance.Add((ability, sharedChance));
+                    foreach (var ability in normal)
+                        _abilitiesChance.Add((ability, ability.Chance));
+
+                    var restChance = 100 - combinedChance;
+                    var core = _abilities.Where(x => x.ChanceType == Data.ChanceTypes.Core).ToList();
+                    if (core.Count == 0)
+                        _abilitiesChance.Add((AbilityBuilder.CreateEmpty(), restChance));
+                    else
+                    {
+                        var sharedChance = 1d * restChance / core.Count;
+                        foreach (var ability in core)
+                            _abilitiesChance.Add((ability, sharedChance));
+                    }
                 }
             }
 
@@ -60,7 +82,7 @@ namespace IdleHeroes.Model
         {
             Maximum = Round(_abilitiesChance.Max(x => x.Chance));
             Abilities.AddRange(_abilitiesChance.OrderByDescending(x=>x.Chance).Select(x => 
-            new AbilityInfo() { Percentage = Round(x.Chance), Name = x.Ability?.Name}));            
+            new AbilityInfo() { Percentage = Round(x.Chance), Name = x.Ability.Name}));            
         }
         private int Round(double value) => (int)Math.Round(value);
 

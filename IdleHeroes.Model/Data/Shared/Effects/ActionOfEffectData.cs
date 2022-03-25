@@ -1,15 +1,15 @@
 ﻿namespace IdleHeroes.Model
 {
-    public abstract class ActionData
+    public abstract class ActionOfEffectData
     {
-        public ActionData(string id, string abilityId)
+        public ActionOfEffectData(string id, string effectId)
         {
             Id = id;
-            AbilityId = abilityId;
+            EffectId = effectId;
         }
 
         public string Id { get; }
-        public string AbilityId { get; }
+        public string EffectId { get; }
 
         public abstract void AddAction(HeroAvatarBuilder hero);
     }

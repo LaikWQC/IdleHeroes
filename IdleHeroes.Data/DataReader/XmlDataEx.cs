@@ -29,10 +29,14 @@ namespace IdleHeroes.Data
         {
             return element.ParseToEnum<DurationTypes>("DurationType");
         }
+        public static PerkShareTypes ParseToShareType(this XElement element)
+        {
+            return element.ParseToEnum<PerkShareTypes>("Type");
+        }
 
         public static string ParseToString(this XElement element, string attribute)
         {
-            return element.Attribute(attribute).ParseToString();
+            return element.Attribute(attribute)?.ParseToString();
         }
         public static string ParseToString(this XAttribute attribute)
         {

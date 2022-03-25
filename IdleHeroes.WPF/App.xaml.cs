@@ -26,7 +26,7 @@ namespace IdleHeroes.WPF
             PropertyService.Instance.Initialize(new MvvmPropertyFactory());
             TimeService.Instance.Initialize(new Time(60));
 
-            HeroDataLoader.LoadData(new DataErrorBase());
+            HeroDataLoader.LoadData();
 
             new MainWindow() { DataContext = new MainViewModel() }.Show();
 

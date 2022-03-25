@@ -1,6 +1,6 @@
 ﻿namespace IdleHeroes.Data
 {
-    public enum AbilityShareTypes
+    public enum PerkShareTypes
     {
         Self,
         All

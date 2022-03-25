@@ -1,4 +1,5 @@
-﻿using LaikWQC.Utils.Commands;
+﻿using IdleHeroes.Data;
+using LaikWQC.Utils.Commands;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
@@ -25,6 +26,7 @@ namespace IdleHeroes.Model
         public string Id => _data.Id;
         public int Price => _data.Price ?? 0;
         public bool IsBought { get; private set; } = false;
+        public bool IsAllowTo(JobModel model) => IsBought && (_data.ShareType == PerkShareTypes.All || _owner == model);
 
         public ICommand CmdBuy { get; }
         private bool CanBuy() => !IsBought && _owner.Experience >= Price;

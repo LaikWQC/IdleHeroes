@@ -23,5 +23,12 @@ namespace IdleHeroes.Model
         public ChanceTypes ChanceType { get; }
         public int Chance { get; }
         public ICollection<ActionData> Actions { get; }
+
+        public void AddAbility(HeroAvatarBuilder hero)
+        {
+            hero.Abilities.Add(Id, new AbilityBuilder(this));
+            foreach(var action in Actions)
+                action.AddAction(hero);
+        }
     }
 }
