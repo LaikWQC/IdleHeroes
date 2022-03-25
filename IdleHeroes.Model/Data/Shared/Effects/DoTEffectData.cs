@@ -2,20 +2,22 @@
 
 namespace IdleHeroes.Model
 {
-    public class DoTEffectData : EffectData
+    public class DoTEffectData : ActionOfEffectData
     {
-        private readonly int _potency;
-
-        public DoTEffectData(EffectTargetTypes targetType, int duration, int potency) : base(targetType, duration)
+        public DoTEffectData(string id, string effectId, int potency) : base(id, effectId)
         {
-            _potency = potency;
+            Potency = potency;
         }
 
-        public override EffectFactory EnsureCreateEffectFactory(HeroAvatarBuilder statistic)
+        public int Potency { get; }
+
+        public override void AddAction(HeroAvatarBuilder hero)
         {
-            if (!statistic.Effects.TryGetValue(this, out var factory))
-                statistic.Effects[this] = factory = new DoTEffectFactory.Builder(_duration, _targetType, _potency);
-            return factory.Product;
+            if (!hero.Effects.TryGetValue(EffectId, out var effect)) return;
+
+            var builder = new DoTActionOfEffectBuider(Potency);
+            effect.AddAction(builder);
+            hero.EffectActions.Add(Id, builder);
         }
     }
 }

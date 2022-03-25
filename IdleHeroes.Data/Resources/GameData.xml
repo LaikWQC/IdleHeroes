@@ -1,62 +1,30 @@
 <Data>
 	<Jobs>
-		<Job Name="Archer" Tags="ARC,RNG,ALL">
+		<Job Name="Archer">
 			<Perks>
-				<Perk Id="Shot" Price="0" Info="Default: add ArrowShot - self (ability and action)">
-					<Ability AbilityId="Shot" Tags="ARC"/>
-					<Shared Id="Ac_Shot" Tags="ARC"/>
-					<Link AbilityId="Shot" ActionId="Shot" Tags="ARC"/>
-				</Perk>
-				<Perk Id="AimS_arc" Price="0" Info="Add AimedShot - self">
-					<Shared Id="Ab_AimS" Tags="ARC"/>
-					<Shared Id="L_AimS" Tags="ARC"/>
-					<Shared Id="Ac_AimedE" Tags="ARC"/>
-					<Shared Id="L_AimedE" Tags="ARC"/>
-				</Perk>
-				<Perk Id="PoiS" Price="0" Info="Add PoisonShot - self">
-					<Ability AbilityId="PoiS" Tags="ARC"/>
-					<Link AbilityId="PoiS" ActionId="Shot" Tags="ARC"/>
-					<Action ActionId="PoisonE" Tags="ARC"/>
-					<Link AbilityId="PoiS" ActionId="PoisonE" Tags="ARC"/>
-				</Perk>
-				<Perk Id="HuntM" Price="0" Info="Add HuntersMark - self">
-					<Ability AbilityId="HuntM" Tags="ARC"/>
-					<Link AbilityId="HuntM" ActionId="Shot" Tags="ARC"/>
-					<Action ActionId="HMarkE" Tags="ARC"/>
-					<Link AbilityId="HuntM" ActionId="HMarkE" Tags="ARC"/>
-				</Perk>
-				<Perk Id="AimS_rng" Price="0" Info="Add AimedShot - all ranged">
-					<Shared Id="Ab_AimS" Tags="RNG"/>
-					<Shared Id="Ac_Shot" Tags="RNG"/>
-					<Shared Id="L_AimS" Tags="RNG"/>
-					<Shared Id="Ac_AimedE" Tags="RNG"/>
-					<Shared Id="L_AimedE" Tags="RNG"/>
-				</Perk>
+				<Ability Id="ArrS" Type="All" Name="Arrow shot" Target="Enemy" ChanceType="Core" Chance="100">
+					<Damage Potency="110"/>
+				</Ability>
+				<Ability Id="AimS" Type="All" Name="Aimed shot" Target="Enemy" ChanceType="Normal" Chance="15">
+					<Damage Potency="100"/>
+					<Effect Id="Aim" Target="Self" Duration="3" DurationType="Attack">
+						<MinDamage Value="20"/>
+					</Effect>
+				</Ability>
+				<Ability Id="PsnS" Type="All" Name="Poison shot" Target="Enemy" ChanceType="Normal" Chance="25">
+					<Damage Potency="80"/>
+					<Effect Id="Poison" Target="Target" Duration="10" DurationType="Seconds">
+						<DoT Potency="20"/>
+					</Effect>
+				</Ability>
+				<Ability Id="HMark" Type="All" Price="0" Name="Hunter's mark" Target="Enemy" ChanceType="Normal" Chance="15">
+					<Damage Potency="100"/>
+					<Effect Id="HMark_E" Target="Target" Duration="10" DurationType="Seconds">
+						<IncomingDamage Value="10"/>
+					</Effect>
+				</Ability>
 			</Perks>
-			<SharedPerks>
-				<Ability SharedId="Ab_AimS" AbilityId="AimS"/>
-				<Action SharedId="Ac_AimedE" ActionId="AimedE"/>
-				<Action SharedId="Ac_Shot" ActionId="Shot"/>
-				<Link SharedId="L_AimS" AbilityId="AimS" ActionId="Shot"/>
-				<Link SharedId="L_AimedE" AbilityId="AimS" ActionId="AimedE"/>
-			</SharedPerks>
+			<Weapon AttackType="Ranged" WeaponType="Bow" CD="2.5" PDamage="10" MDamage="3"/>
 		</Job>
 	</Jobs>
-	<Abilities>
-		<Ability Id="Shot" Name="Arrow shot" Cd="100"/>
-		<Ability Id="AimS" Name="Aimed shot" Cd="100" Chance="15"/>
-		<Ability Id="PoiS" Name="Poison shot" Cd="100" Chance="25"/>
-		<Ability Id="HuntM" Name="Hunter's mark" Cd="100" Chance="15"/>
-	</Abilities>
-	<Actions>
-		<Damage Id="Shot" Potency="100"/>
-		<Effect Id="AimedE" EffectId="Aimed"/>
-		<Effect Id="PoisonE" EffectId="Poison"/>
-		<Effect Id="HMarkE" EffectId="HMark"/>
-	</Actions>
-	<Effects>
-		<MinDamage Id="Aimed" Target="Self" Duration="15" Value="20"/>
-		<DoT Id="Poison" Duration="9" Target="Enemy" Potency="30"/>
-		<IncomingDamage Id="HMark" Target="Enemy" Duration="15" Value="10"/>
-	</Effects>
 </Data>

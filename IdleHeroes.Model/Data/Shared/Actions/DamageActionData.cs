@@ -2,16 +2,20 @@
 {
     public class DamageActionData : ActionData
     {
-        private readonly int _potency;
-
-        public DamageActionData(string id, int potency) : base(id)
+        public DamageActionData(string id, string abilityId, int potency) : base(id, abilityId)
         {
-            _potency = potency;
+            Potency = potency;
         }
 
-        public override void CreateAction(HeroAvatarBuilder statistic)
+        public int Potency { get; }
+
+        public override void AddAction(HeroAvatarBuilder hero)
         {
-            statistic.Actions[_id] = new DamageActionModel.Builder(_potency);
+            if (!hero.Abilities.TryGetValue(AbilityId, out var ability)) return;
+
+            var builder = new DamageActionBuilder(Potency);
+            ability.AddAction(builder);
+            hero.Actions.Add(Id, builder);
         }
     }
 }

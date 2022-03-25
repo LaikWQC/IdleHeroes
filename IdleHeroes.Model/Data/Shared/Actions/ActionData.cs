@@ -2,13 +2,15 @@
 {
     public abstract class ActionData
     {
-        protected readonly string _id;
-
-        public ActionData(string id)
+        public ActionData(string id, string abilityId)
         {
-            _id = id;
+            Id = id;
+            AbilityId = abilityId;
         }
 
-        public abstract void CreateAction(HeroAvatarBuilder statistic);
+        public string Id { get; }
+        public string AbilityId { get; }
+
+        public abstract void AddAction(HeroAvatarBuilder hero);
     }
 }

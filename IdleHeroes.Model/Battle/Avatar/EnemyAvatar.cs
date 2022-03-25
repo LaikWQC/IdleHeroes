@@ -1,4 +1,7 @@
-﻿namespace IdleHeroes.Model
+﻿using IdleHeroes.Data;
+using System.Linq;
+
+namespace IdleHeroes.Model
 {
     public class EnemyAvatar : Avatar
     {
@@ -10,16 +13,15 @@
         private static AvatarStats CreateDto() => new AvatarStats($"Dummy_{count++}", 2.5, 50);
         private static AbilitiesContainer CreateContainer()
         {
-            var statistic = new HeroAvatarBuilder();
-            statistic.Power = 5;
+            var builder = new HeroAvatarBuilder();
+            builder.Power = 5;
 
-            var ability = new AbilityModel.Builder("Scare", 100, 80);
-            var action = new DamageActionModel.Builder(100);
-            ability.AddAction(action.Product);
-            ability.Finish();
-            action.Finish(statistic);
+            var action = new DamageActionBuilder(100);
+            var ability = new AbilityBuilder(new AbilityData(new AbilityDto() { Name = "Scare", Chance = 80, ChanceType = ChanceTypes.Normal }, new ActionData[0]));            
+            ability.AddAction(action);
+            builder.Abilities.Add("Scare", ability);
 
-            return new AbilitiesContainer(new AbilityModel[] { ability.Product });
+            return new AbilitiesContainer(builder.Abilities.Values.Select(x => x.Create(builder)));
         }
     }
 }

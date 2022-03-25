@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using IdleHeroes.Data;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace IdleHeroes.Model

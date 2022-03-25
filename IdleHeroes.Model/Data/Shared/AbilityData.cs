@@ -1,23 +1,34 @@
-﻿namespace IdleHeroes.Model
+﻿using IdleHeroes.Data;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace IdleHeroes.Model
 {
     public class AbilityData
     {
-        private readonly string _name;
-        private readonly string _id;
-        private readonly int _cooldownMulti;
-        private readonly int? _chance;
-
-        public AbilityData(string name, string id, int cooldownMulti, int? chance)
+        public AbilityData(AbilityDto dto, IEnumerable<ActionData> actions)
         {
-            _name = name;
-            _id = id;
-            _cooldownMulti = cooldownMulti;
-            _chance = chance;
+            Id = dto.Id;
+            Name = dto.Name;
+            TargetType = dto.TargetType;
+            ChanceType = dto.ChanceType;
+            Chance = dto.Chance;
+
+            Actions = actions.ToList().AsReadOnly();
         }
 
-        public void CreateAbility(HeroAvatarBuilder statistic)
+        public string Id { get; }
+        public string Name { get; }
+        public AbilityTargetTypes TargetType { get; }
+        public ChanceTypes ChanceType { get; }
+        public int Chance { get; }
+        public ICollection<ActionData> Actions { get; }
+
+        public void AddAbility(HeroAvatarBuilder hero)
         {
-            statistic.Abilities[_id] = new AbilityModel.Builder(_name, _cooldownMulti, _chance);
+            hero.Abilities.Add(Id, new AbilityBuilder(this));
+            foreach(var action in Actions)
+                action.AddAction(hero);
         }
     }
 }

@@ -2,17 +2,26 @@
 {
     public class EffectActionData : ActionData
     {
-        private readonly EffectData _effect;
-
-        public EffectActionData(string id, EffectData effect) : base(id)
+        public EffectActionData(string id, string abilityId, EffectData effect) : base(id, abilityId)
         {
-            _effect = effect;
+            Effect = effect;
         }
 
-        public override void CreateAction(HeroAvatarBuilder statistic)
+        public EffectData Effect { get; }
+
+        public override void AddAction(HeroAvatarBuilder hero)
         {
-            var factory = _effect.EnsureCreateEffectFactory(statistic);
-            statistic.Actions[_id] = new EffectActionModel.Builder(factory); 
+            if (!hero.Abilities.TryGetValue(AbilityId, out var ability)) return;
+
+            var effectBuilder = new EffectFactoryBuilder(Effect);
+            hero.Effects.Add(Effect.Id, effectBuilder);
+
+            var actionBuilder = new EffectActionBuilder(Effect.TargetType, effectBuilder);
+            ability.AddAction(actionBuilder);
+            hero.Actions.Add(Id, actionBuilder);
+
+            foreach (var action in Effect.Actions)
+                action.AddAction(hero);
         }
     }
 }

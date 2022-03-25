@@ -31,7 +31,8 @@ namespace IdleHeroes.Model
                     _behaviour = new SafeBehaviour(this);
                     break;
                 case BattleContextStates.Idle:
-                    _behaviour = new IdleBehaviour(this);
+                    BattleContext.State.Value = BattleContextStates.Hunting;
+                    //_behaviour = new IdleBehaviour(this);
                     break;
                 case BattleContextStates.Hunting:
                     _behaviour = new HuntingBehaviour(this);
@@ -80,7 +81,6 @@ namespace IdleHeroes.Model
             {
                 _owner = owner; 
                 _owner.RemoveAbility();
-                _owner.BattleContext.State.Value = BattleContextStates.Hunting;
             }
 
             public void Update() { }

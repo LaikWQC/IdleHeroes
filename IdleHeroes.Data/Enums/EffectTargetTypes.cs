@@ -3,6 +3,7 @@
     public enum EffectTargetTypes
     {
         Self,
-        Enemy
+        Enemy,
+        Target
     }
 }
