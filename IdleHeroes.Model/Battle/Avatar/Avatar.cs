@@ -14,6 +14,7 @@ namespace IdleHeroes.Model
         public Avatar(AvatarStats stats, AbilitiesContainer container, IBattleContext context)
         {
             CurrentAbility = new ActiveAbility();
+            CreateToken();
 
             Stats = stats;
             AbilitiesContainer = container;
@@ -34,6 +35,7 @@ namespace IdleHeroes.Model
         }
         private void Die()
         {
+            CancelToken();
             Died?.Invoke();
         }
 
