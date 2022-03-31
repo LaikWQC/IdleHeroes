@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace IdleHeroes.Model
 {
@@ -25,14 +26,14 @@ namespace IdleHeroes.Model
 
         private void SelectBehaviour()
         {
+            _behaviour?.Exit();
             switch (BattleContext.State.Value)
             {
                 case BattleContextStates.Safe:
                     _behaviour = new SafeBehaviour(this);
                     break;
                 case BattleContextStates.Idle:
-                    BattleContext.State.Value = BattleContextStates.Hunting;
-                    //_behaviour = new IdleBehaviour(this);
+                    _behaviour = new IdleBehaviour(this);
                     break;
                 case BattleContextStates.Hunting:
                     _behaviour = new HuntingBehaviour(this);
@@ -40,7 +41,9 @@ namespace IdleHeroes.Model
                 case BattleContextStates.Battle:
                     _behaviour = new BattleBehaviour(this);
                     break;
+                default: return;
             }
+            _behaviour.Enter();
         }
 
         private void Regen(double multi = 1)
@@ -53,7 +56,7 @@ namespace IdleHeroes.Model
             CurrentAbility.Cooldown.Current.Value += DeltaTime * Stats.AttackSpeed;
             if (!CurrentAbility.Cooldown.IsMaxed) return;
 
-            CurrentAbility.Ability.Value.UseAbility(BattleContext);
+            CurrentAbility.Ability.Value.UseAbility(BattleContext, _token);
             if (BattleContext.State.Value != BattleContextStates.Battle) return;
             ChooseAbility();
         }
@@ -68,10 +71,12 @@ namespace IdleHeroes.Model
                 _owner.RemoveAbility();
             }
 
+            public void Enter() { }
             public void Update()
             {
                 _owner.Regen();
             }
+            public void Exit() { }
         }
         private class IdleBehaviour : IBehaviour
         {
@@ -83,7 +88,12 @@ namespace IdleHeroes.Model
                 _owner.RemoveAbility();
             }
 
+            public void Enter() 
+            {
+                _owner.BattleContext.State.Value = BattleContextStates.Hunting;
+            }
             public void Update() { }
+            public void Exit() { }
         }
         private class HuntingBehaviour : IBehaviour
         {
@@ -95,10 +105,12 @@ namespace IdleHeroes.Model
                 _owner.RemoveAbility();
             }
 
+            public void Enter() { }
             public void Update() 
             {
                 _owner.Regen(0.5);
             }
+            public void Exit() { }
         }
         private class BattleBehaviour : IBehaviour
         {
@@ -110,9 +122,18 @@ namespace IdleHeroes.Model
                 _owner.ChooseAbility();
             }
 
+            public void Enter() 
+            {
+                _owner.CreateToken();
+
+            }
             public void Update()
             {
                 _owner.Battle();
+            }
+            public void Exit() 
+            {
+                _owner.CancelToken();
             }
         }
     }

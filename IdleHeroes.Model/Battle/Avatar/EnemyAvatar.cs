@@ -1,5 +1,6 @@
 ﻿using IdleHeroes.Data;
 using System.Linq;
+using System.Threading;
 
 namespace IdleHeroes.Model
 {
@@ -7,6 +8,7 @@ namespace IdleHeroes.Model
     {
         public EnemyAvatar(IBattleContext context) : base(CreateDto(), CreateContainer(), context)
         {
+            _token = CancellationToken.None;
             ChooseAbility();
         }
         private static int count = 1;

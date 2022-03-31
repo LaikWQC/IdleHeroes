@@ -1,5 +1,6 @@
 ﻿using IdleHeroes.Model.Time;
 using System;
+using System.Threading;
 
 namespace IdleHeroes.Model
 {
@@ -7,6 +8,8 @@ namespace IdleHeroes.Model
     {
         private IBattleContext _context;
         protected double _attackSpeed;
+        private CancellationTokenSource _cts;
+        protected CancellationToken _token;
 
         public Avatar(AvatarStats stats, AbilitiesContainer container, IBattleContext context)
         {
@@ -31,7 +34,6 @@ namespace IdleHeroes.Model
         }
         private void Die()
         {
-            Dispose();
             Died?.Invoke();
         }
 
@@ -42,10 +44,16 @@ namespace IdleHeroes.Model
 
         protected override void Update()
         {
+            Battle();
+        }
+
+        protected void Battle()
+        {
             CurrentAbility.Cooldown.Current.Value += DeltaTime * Stats.AttackSpeed;
             if (!CurrentAbility.Cooldown.IsMaxed) return;
 
-            CurrentAbility.Ability.Value.UseAbility(_context);
+            CurrentAbility.Ability.Value.UseAbility(_context, _token);
+            if (_token.IsCancellationRequested) return;
             ChooseAbility();
         }
 
@@ -56,6 +64,16 @@ namespace IdleHeroes.Model
         protected void RemoveAbility()
         {
             CurrentAbility.SetAbility(null);
+        }
+
+        protected void CreateToken()
+        {
+            _cts = new CancellationTokenSource();
+            _token = _cts.Token;
+        }
+        protected void CancelToken()
+        {
+            _cts?.Cancel();
         }
     }
 }

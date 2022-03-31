@@ -84,6 +84,7 @@ namespace IdleHeroes.Model
         }
         private void OnEnemyDied()
         {
+            Enemy.Value.Dispose();
             Enemy.Value = null;
             BattleContext.State.Value = BattleContextStates.Idle;
         }

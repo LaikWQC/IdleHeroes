@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 
 namespace IdleHeroes.Model
 {
@@ -24,10 +25,11 @@ namespace IdleHeroes.Model
         public int Chance { get; }
 
 
-        public void UseAbility(IBattleContext context)
+        public void UseAbility(IBattleContext context, CancellationToken token)
         {
             foreach(var action in _actions)
             {
+                if (token.IsCancellationRequested) return;
                 action.UseAction(context); //TODO set target by type
             }
         }

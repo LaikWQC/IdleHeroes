@@ -7,19 +7,19 @@
 				</Ability>
 				<Ability Id="AimS" Type="All" Name="Aimed shot" Target="Enemy" ChanceType="Normal" Chance="15">
 					<Damage Potency="100"/>
-					<Effect Id="Aim" Target="Self" Duration="3" DurationType="Attack">
+					<Effect Id="Aim" Target="Self" Name="Aim" Duration="3" DurationType="Attack">
 						<MinDamage Value="20"/>
 					</Effect>
 				</Ability>
 				<Ability Id="PsnS" Type="All" Name="Poison shot" Target="Enemy" ChanceType="Normal" Chance="25">
 					<Damage Potency="80"/>
-					<Effect Id="Poison" Target="Target" Duration="10" DurationType="Seconds">
+					<Effect Id="Psn" Target="Target" Name="Poison" Duration="10" DurationType="Seconds">
 						<DoT Potency="20"/>
 					</Effect>
 				</Ability>
 				<Ability Id="HMark" Type="All" Price="0" Name="Hunter's mark" Target="Enemy" ChanceType="Normal" Chance="15">
 					<Damage Potency="100"/>
-					<Effect Id="HMark_E" Target="Target" Duration="10" DurationType="Seconds">
+					<Effect Id="HMark_E" Target="Target" Name="Hunter's mark" Duration="10" DurationType="Seconds">
 						<IncomingDamage Value="10"/>
 					</Effect>
 				</Ability>
@@ -27,4 +27,27 @@
 			<Weapon AttackType="Ranged" WeaponType="Bow" CD="2.5" PDamage="10" MDamage="3"/>
 		</Job>
 	</Jobs>
+	
+	<Enemies>
+		<Enemy Id="Wolf" Name="Wolf" CD="2" PDamage="7" MDamage="0" Exp="2">
+			<Ability Name="Bite" Target="Enemy" ChanceType="Core" Chance="100">
+				<Damage Potency="100"/>
+				<Effect Target="Target" Name="Bleed" Duration="10" DurationType="Seconds">
+					<DoT Potency="20"/>
+				</Effect>
+			</Ability>
+		</Enemy>
+		<Enemy Id="Skel" Name="Skeleton" CD="3" PDamage="12" MDamage="0" Exp="2">
+			<Ability Name="Slash" Target="Enemy" ChanceType="Core" Chance="100">
+				<Damage Potency="100"/>
+			</Ability>
+		</Enemy>
+	</Enemies>
+	
+	<Locations>
+		<Location Name="Forest">
+			<Enemy Id="Wolf" Power="100" Drop="100" Population="20"/>
+			<Enemy Id="Skel" Power="100" Drop="100" Population="10"/>
+		</Location>
+	</Locations>
 </Data>
